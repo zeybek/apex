@@ -18,7 +18,7 @@ make validate-official   # official skills-ref validation (needs network + uvx)
 ## Before you open a pull request
 
 - Run `make validate` and `make validate-official`; both must pass.
-- Keep every skill body language- and framework-agnostic. Stack-specific examples belong in the user's own repository, not here.
+- Keep every skill body language- and framework-agnostic. Small stack-specific walkthroughs may live under `examples/`, outside the distributed plugin, when they demonstrate a skill without becoming skill instructions.
 - Keep `SKILL.md` under 500 lines and push depth into `references/`, loaded with explicit `Read <file> when <condition>` triggers.
 - Reference links must be one level deep and resolve.
 

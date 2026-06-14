@@ -48,6 +48,10 @@ Using another skills-compatible agent (Cursor, OpenCode, Gemini CLI, and others)
 
 Each skill is a `SKILL.md` workflow under `plugins/apex/skills/`; deeper guidance lives in `references/` and loads only when relevant. Keeping the workflows separate keeps each one focused and lets only the relevant skill enter context.
 
+## Examples
+
+[`examples/`](examples/README.md) contains one client-neutral walkthrough for each skill. The implement and investigate walkthroughs include small standard-library workspaces plus deterministic verifier scripts, so you can exercise the workflow without changing the canonical example files.
+
 ## Design principles
 
 - Optimize for correct, useful, maintainable software and safe delivery.
