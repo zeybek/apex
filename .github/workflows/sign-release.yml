@@ -40,4 +40,4 @@ jobs:
       - name: Upload signatures to release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ inputs.tag }}" apex-*.tar.gz.sig apex-*.tar.gz.pem --clobber
+        run: gh release upload "${{ inputs.tag }}" apex-*.tar.gz.sig apex-*.tar.gz.pem --repo "${{ github.repository }}" --clobber
