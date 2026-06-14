@@ -10,7 +10,7 @@ Direction for Apex, subject to change based on need and feedback. This is a prio
 ## Next
 
 - Pursue the OpenSSF Best Practices badge (self-certification at bestpractices.dev), complementing the OpenSSF Scorecard and CodeQL scanning that already run in CI.
-- Per-skill usage walkthroughs as adoption grows.
+- Expand the initial per-skill walkthroughs based on adoption and recurring questions.
 
 ## Later / under consideration
 
