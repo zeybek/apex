@@ -1,0 +1,41 @@
+name: Sign release
+
+# Manually sign an existing release's archive with cosign (keyless). Future
+# releases are signed inline by the Release workflow's attest job; this is for
+# signing releases published before that step existed, or re-signing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to sign (for example v0.1.0)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  sign:
+    name: Sign release archive
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - name: Download archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download "${{ inputs.tag }}" --repo "${{ github.repository }}" --pattern 'apex-*.tar.gz'
+      - name: Sign archive (keyless)
+        run: |
+          for f in apex-*.tar.gz; do
+            cosign sign-blob --yes \
+              --output-signature "${f}.sig" \
+              --output-certificate "${f}.pem" "${f}"
+          done
+      - name: Upload signatures to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ inputs.tag }}" apex-*.tar.gz.sig apex-*.tar.gz.pem --clobber
