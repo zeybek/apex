@@ -28,6 +28,22 @@ codex plugin marketplace add zeybek/apex
 codex plugin add apex@apex
 ```
 
+Or install the skills directly with the [GitHub CLI](https://cli.github.com/) (`gh skill`, in preview), which targets Claude Code, Codex, Cursor, Gemini CLI, and many other agents:
+
+```bash
+# All four skills into the current project
+gh skill install zeybek/apex --all
+
+# Or for a specific agent, at user scope (available everywhere)
+gh skill install zeybek/apex --all --agent claude-code --scope user
+```
+
+Or with the [skills.sh](https://www.skills.sh/) CLI:
+
+```bash
+npx skills add zeybek/apex
+```
+
 For local development, point the marketplace at a path instead of `zeybek/apex`, then install with the same `apex@apex` commands:
 
 ```bash
