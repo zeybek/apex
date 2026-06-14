@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apex trigger eval report",
+  "description": "Output of `run_evals.py trigger`: per-query activation rates and split pass rates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skill", "client", "runs", "seed", "split", "per_query", "summary"],
+  "properties": {
+    "skill": { "type": "string", "minLength": 1 },
+    "client": { "type": "string", "minLength": 1 },
+    "model": { "type": "string" },
+    "runs": { "type": "integer", "minimum": 1 },
+    "seed": { "type": "integer" },
+    "threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["train", "validation"],
+      "properties": {
+        "train": { "type": "array", "items": { "type": "string" } },
+        "validation": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "per_query": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["query", "should_trigger", "split", "trigger_rate", "passed"],
+        "properties": {
+          "query": { "type": "string", "minLength": 1 },
+          "should_trigger": { "type": "boolean" },
+          "split": { "type": "string", "enum": ["train", "validation"] },
+          "trigger_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+          "passed": { "type": "boolean" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["train_pass_rate", "validation_pass_rate", "queries", "runs_total"],
+      "properties": {
+        "train_pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "validation_pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "queries": { "type": "integer", "minimum": 0 },
+        "runs_total": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

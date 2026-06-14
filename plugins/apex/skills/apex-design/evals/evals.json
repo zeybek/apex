@@ -1,0 +1,41 @@
+{
+  "skill_name": "apex-design",
+  "evals": [
+    {
+      "id": "service-boundary",
+      "prompt": "should we pull billing out of our monolith? the team's growing but we don't have much distributed-systems experience, and billing has stricter availability and audit requirements than the rest of the system. i want a recommendation before we start building.",
+      "expected_output": "A recommendation grounded in explicit quality scenarios and team constraints, comparing credible alternatives including retaining the monolith, with failure, data, migration, ownership, and revisit considerations.",
+      "assertions": [
+        "The recommendation appears before or clearly alongside the supporting analysis.",
+        "The design defines measurable or observable quality scenarios rather than relying only on labels such as scalable or reliable.",
+        "Retaining or modularizing the monolith is considered as a credible alternative.",
+        "The comparison addresses at least three of: operational burden, team capability, data consistency, and failure behavior.",
+        "The decision includes an incremental delivery path and conditions that should trigger reconsideration."
+      ]
+    },
+    {
+      "id": "public-event-evolution",
+      "prompt": "Design the evolution of a public OrderCreated event so a required shipping address can be added while old producers and consumers continue running during a multi-week rollout.",
+      "expected_output": "A backward-compatible event evolution design that defines semantics, old/new coexistence, migration stages, consumer coordination, observability, and removal criteria.",
+      "assertions": [
+        "The design identifies producers, consumers, event semantics, and compatibility as contracts.",
+        "The proposal makes readers tolerate old and new forms before requiring writers to emit the new form.",
+        "Absence, defaults, and required-field semantics are explicitly defined.",
+        "Rollout includes adoption measurement, failure handling, and cleanup criteria.",
+        "The design tests representative old and new producers and consumers together."
+      ]
+    },
+    {
+      "id": "build-versus-buy",
+      "prompt": "Evaluate whether to build an internal feature flag service or buy a managed product. The company handles sensitive customer data, has a small platform team, and requires regional resilience.",
+      "expected_output": "A context-specific build-versus-buy recommendation based on security, reliability, delivery, operations, lifecycle cost, reversibility, and team capability, with assumptions and validation steps.",
+      "assertions": [
+        "The analysis states decision drivers and minimum acceptable requirements.",
+        "Both build and buy alternatives are compared against the same criteria.",
+        "The analysis addresses at least four of: security, data handling, regional failure, vendor dependence, and operational ownership.",
+        "The recommendation states assumptions and evidence still needed.",
+        "The decision includes reversibility or exit considerations."
+      ]
+    }
+  ]
+}

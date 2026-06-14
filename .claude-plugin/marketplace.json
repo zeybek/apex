@@ -1,0 +1,19 @@
+{
+  "name": "apex",
+  "owner": {
+    "name": "Ahmet Zeybek"
+  },
+  "metadata": {
+    "description": "Portable senior engineering workflows for software development agents."
+  },
+  "plugins": [
+    {
+      "name": "apex",
+      "source": "./plugins/apex",
+      "description": "Design, implement, review, and investigate software changes with senior engineering judgment.",
+      "homepage": "https://github.com/zeybek/apex",
+      "repository": "https://github.com/zeybek/apex",
+      "category": "productivity"
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validators (py ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python3 scripts/validate_package.py
+      - run: python3 scripts/validate_distribution.py
+
+  test:
+    name: Tests + lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -q --cov=scripts --cov-report=term-missing
+      - name: Coverage summary
+        if: ${{ !cancelled() }}
+        run: |
+          {
+            echo "### Coverage"
+            echo
+            coverage report --format=markdown 2>/dev/null || coverage report
+          } >> "$GITHUB_STEP_SUMMARY"
+      - run: ruff check scripts tests
+      - run: mypy scripts tests
+
+  official:
+    name: Official skills-ref validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+      - run: make validate-official
+
+  schema:
+    name: Eval JSON Schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+      - name: Validate eval files against their schemas
+        run: |
+          uvx check-jsonschema --schemafile schemas/trigger-evals.schema.json plugins/apex/skills/*/evals/trigger-evals.json
+          uvx check-jsonschema --schemafile schemas/evals.schema.json plugins/apex/skills/*/evals/evals.json
+      - name: Validate benchmark files when present
+        run: |
+          shopt -s globstar nullglob
+          files=(benchmarks/**/*.json)
+          if [ ${#files[@]} -gt 0 ]; then
+            uvx check-jsonschema --schemafile schemas/benchmark.schema.json "${files[@]}"
+          else
+            echo "No benchmark files yet; skipping."
+          fi
+      - name: Validate a generated trigger report against its schema
+        run: |
+          python3 scripts/run_evals.py trigger --skill apex-design --client stub --runs 1 --out trigger-report.json
+          uvx check-jsonschema --schemafile schemas/trigger-report.schema.json trigger-report.json
+
+  eval-smoke:
+    name: Eval harness smoke (offline)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+      - name: Run the harness via the offline stub client (no model)
+        run: |
+          for skill in plugins/apex/skills/*/; do
+            name=$(basename "$skill")
+            python3 scripts/run_evals.py trigger --skill "$name" --client stub --runs 1
+            python3 scripts/run_evals.py output --skill "$name" --client stub --dry-run
+          done
+
+  markdownlint:
+    name: Markdown lint (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - run: npx --yes markdownlint-cli2 "**/*.md" "#node_modules"

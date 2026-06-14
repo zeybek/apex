@@ -1,0 +1,22 @@
+[
+  { "query": "our error rate spiked right after the last deploy and i can't tell why, help me figure out what's going on", "should_trigger": true },
+  { "query": "checkout is intermittently failing for some users but not others and i have no idea what's different", "should_trigger": true },
+  { "query": "the nightly job started timing out about twice a week, it's flaky and i need to find the cause", "should_trigger": true },
+  { "query": "production latency doubled overnight, walk me through diagnosing where the time is going", "should_trigger": true },
+  { "query": "we just got paged for a partial outage, what do we do first and how do we find the root cause", "should_trigger": true },
+  { "query": "a customer says their account data looks corrupted, help me trace how it ended up in that state", "should_trigger": true },
+  { "query": "this test passes locally but fails randomly in CI, i need to track down why", "should_trigger": true },
+  { "query": "memory keeps climbing until the service gets OOM-killed and restarts, help me investigate the leak", "should_trigger": true },
+  { "query": "after last week's migration some records have the wrong totals, figure out what went wrong", "should_trigger": true },
+  { "query": "the api started returning 500s for one region only and i don't know why, diagnose it", "should_trigger": true },
+  { "query": "i already know the bug is a missing null check on line 40, just write the fix", "should_trigger": false },
+  { "query": "review this pull request for security and correctness issues", "should_trigger": false },
+  { "query": "help me choose between two database designs for a new feature", "should_trigger": false },
+  { "query": "add cursor-based pagination to the users endpoint", "should_trigger": false },
+  { "query": "refactor this module to remove the duplicated validation logic", "should_trigger": false },
+  { "query": "we already understand it's a race condition, implement a lock to fix it", "should_trigger": false },
+  { "query": "design an alerting and on-call strategy for our new service", "should_trigger": false },
+  { "query": "is this migration script safe to run, review it before i apply it", "should_trigger": false },
+  { "query": "check whether my test coverage is sufficient for this change", "should_trigger": false },
+  { "query": "what's a good name for this variable", "should_trigger": false }
+]

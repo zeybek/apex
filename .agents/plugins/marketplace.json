@@ -1,0 +1,20 @@
+{
+  "name": "apex",
+  "interface": {
+    "displayName": "Apex"
+  },
+  "plugins": [
+    {
+      "name": "apex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/apex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

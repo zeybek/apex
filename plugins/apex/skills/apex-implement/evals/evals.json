@@ -1,0 +1,41 @@
+{
+  "skill_name": "apex-implement",
+  "evals": [
+    {
+      "id": "duplicate-job",
+      "prompt": "our order worker is double-charging customers — two workers can grab the same unprocessed order, call the payment API, then mark it processed, so the card gets hit twice. can you fix just this using our existing database and test patterns? don't redesign unrelated modules.",
+      "expected_output": "A focused implementation that establishes the concurrency invariant, prevents duplicate charging with an appropriate atomic or idempotent mechanism, adds a regression test for competing workers or retries, and reports verification and residual risk.",
+      "assertions": [
+        "The work identifies duplicate processing as a concurrency or idempotency risk before selecting the fix.",
+        "The implementation avoids relying on a non-atomic check followed by a write.",
+        "The change remains focused on the affected worker and required supporting behavior.",
+        "A regression test or equivalent evidence covers competing workers, duplicate delivery, or retry behavior.",
+        "The final report distinguishes checks actually run from assumptions or unverified behavior."
+      ]
+    },
+    {
+      "id": "rolling-schema-change",
+      "prompt": "Implement a change from a single customer_name column to separate first_name and last_name fields in a service that uses rolling deployments and has millions of existing rows. Preserve service availability and a safe recovery path.",
+      "expected_output": "An incremental expand-migrate-contract implementation or plan-backed change that supports old and new versions during rollout, makes backfill observable and resumable, verifies data integrity, and does not prematurely remove the old field.",
+      "assertions": [
+        "The work treats old and new application versions as coexisting during deployment.",
+        "The change uses an additive compatibility phase before destructive cleanup.",
+        "Backfill behavior is bounded, resumable or idempotent, and observable.",
+        "Verification includes data integrity and old/new compatibility.",
+        "Rollback or roll-forward behavior is stated before removing the old representation."
+      ]
+    },
+    {
+      "id": "flaky-integration",
+      "prompt": "A previously stable integration test now fails roughly one run in twenty after a dependency upgrade. Diagnose the failure, implement the smallest justified fix, and verify it without weakening the assertion or adding an arbitrary sleep.",
+      "expected_output": "An evidence-driven investigation that bounds the failure, establishes a plausible root cause, fixes the mechanism rather than hiding the symptom, and verifies repeated or relevant execution without weakening the test.",
+      "assertions": [
+        "The investigation compares working and failing conditions or gathers evidence before changing code.",
+        "The proposed cause connects triggering conditions, violated behavior, and observed failure.",
+        "The fix does not merely add an arbitrary delay, broad retry, or weakened assertion.",
+        "Verification includes repeated or concurrency-relevant execution appropriate to the flake.",
+        "Any remaining uncertainty is stated explicitly."
+      ]
+    }
+  ]
+}

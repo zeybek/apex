@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Apex trigger evals",
+  "description": "Activation prompts labelled with whether the skill should trigger.",
+  "type": "array",
+  "minItems": 20,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["query", "should_trigger"],
+    "properties": {
+      "query": { "type": "string", "minLength": 1 },
+      "should_trigger": { "type": "boolean" }
+    }
+  }
+}

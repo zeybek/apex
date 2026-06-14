@@ -1,0 +1,17 @@
+{
+  "name": "apex",
+  "version": "0.1.0",
+  "description": "Portable senior-level workflows for designing, implementing, reviewing, and investigating software changes.",
+  "author": {
+    "name": "Ahmet Zeybek",
+    "url": "https://github.com/zeybek"
+  },
+  "homepage": "https://github.com/zeybek/apex",
+  "repository": "https://github.com/zeybek/apex",
+  "keywords": [
+    "software-engineering",
+    "architecture",
+    "implementation",
+    "code-review"
+  ]
+}

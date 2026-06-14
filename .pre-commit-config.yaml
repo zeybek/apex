@@ -1,0 +1,29 @@
+# Local + CI gates. Install with `pip install pre-commit` then `pre-commit install`.
+# Run on demand with `pre-commit run --all-files`.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: check-json
+      - id: check-yaml
+  - repo: local
+    hooks:
+      - id: validate-package
+        name: validate package
+        entry: python3 scripts/validate_package.py
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: validate-distribution
+        name: validate distribution
+        entry: python3 scripts/validate_distribution.py
+        language: system
+        pass_filenames: false
+        always_run: true

@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Design how we should split the billing domain from the monolith and document the tradeoffs.",
+    "should_trigger": true
+  },
+  {
+    "query": "Compare synchronous and asynchronous designs for order fulfillment before we implement it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Propose a backward-compatible API evolution strategy for this public endpoint.",
+    "should_trigger": true
+  },
+  {
+    "query": "Create a technical design for migrating this high-volume table with zero planned downtime.",
+    "should_trigger": true
+  },
+  {
+    "query": "Should we build or buy the search capability? Evaluate the options and recommend one.",
+    "should_trigger": true
+  },
+  {
+    "query": "Design the reliability model and failure behavior for this new external integration.",
+    "should_trigger": true
+  },
+  {
+    "query": "We need to choose between a queue and direct calls for notifications. Analyze the tradeoffs.",
+    "should_trigger": true
+  },
+  {
+    "query": "Write an ADR for tenant isolation, including alternatives, migration, and revisit conditions.",
+    "should_trigger": true
+  },
+  {
+    "query": "Evaluate whether the proposed cache architecture meets our latency and consistency requirements.",
+    "should_trigger": true
+  },
+  {
+    "query": "Plan the schema and rollout strategy for versioned domain events consumed by external teams.",
+    "should_trigger": true
+  },
+  {
+    "query": "Implement the already-approved pagination design in the existing repository.",
+    "should_trigger": false
+  },
+  {
+    "query": "Review this architecture implementation for concrete defects and report findings only.",
+    "should_trigger": false
+  },
+  {
+    "query": "Fix the failing unit test in the parser.",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain what eventual consistency means.",
+    "should_trigger": false
+  },
+  {
+    "query": "Summarize this existing ADR.",
+    "should_trigger": false
+  },
+  {
+    "query": "Rename this private helper and update its tests.",
+    "should_trigger": false
+  },
+  {
+    "query": "Find security bugs in this pull request.",
+    "should_trigger": false
+  },
+  {
+    "query": "Add the missing validation branch described in the issue.",
+    "should_trigger": false
+  },
+  {
+    "query": "What database does this repository currently use?",
+    "should_trigger": false
+  },
+  {
+    "query": "Generate release notes from the last ten commits.",
+    "should_trigger": false
+  }
+]

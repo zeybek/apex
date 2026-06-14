@@ -1,0 +1,39 @@
+{
+  "skill_name": "apex-investigate",
+  "evals": [
+    {
+      "id": "deploy-error-spike",
+      "prompt": "Our payment service's error rate jumped from 0.2% to 6% right after this morning's deploy and it's still elevated. Help me investigate.",
+      "expected_output": "Triage and mitigate the ongoing impact first, then localize the failure with evidence, test competing hypotheses, and confirm a mechanism before declaring the deploy the cause.",
+      "assertions": [
+        "Recommends an immediate mitigation such as rolling back or disabling the change before full diagnosis, because impact is ongoing",
+        "Separates mitigation from root-cause analysis and does not treat the rollback itself as the confirmed cause",
+        "Uses concrete evidence (logs, metrics, traces, and exactly what changed at deploy time) to localize the failure",
+        "Forms more than one hypothesis and proposes the cheapest discriminating test first",
+        "States that a confirmed root cause must explain a mechanism and evidence chain, not just name a label"
+      ]
+    },
+    {
+      "id": "flaky-ci-test",
+      "prompt": "A test in our suite passes locally but fails about one run in five in CI. Diagnose it.",
+      "expected_output": "Treat the intermittence as information, find the condition that raises failure probability, bound it by differential comparison, and distinguish a flaky test from a real intermittent bug.",
+      "assertions": [
+        "Treats unreliable reproduction as uncertainty and seeks the condition that raises failure probability, such as timing, ordering, shared state, or load",
+        "Proposes bounding the failure by comparing passing and failing runs along one variable at a time",
+        "Distinguishes a genuinely flaky test from a real intermittent product bug rather than dismissing it as just flaky",
+        "Suggests gathering evidence (repeated or isolated runs, captured logs) before concluding"
+      ]
+    },
+    {
+      "id": "migration-bad-totals",
+      "prompt": "After last week's data migration, some customer accounts show incorrect balance totals. Find out what happened.",
+      "expected_output": "Preserve the corrupted-state evidence, bound which records are affected, trace the mechanism that produced the bad state, and separate correction from durable fix and prevention.",
+      "assertions": [
+        "Prioritizes preserving and inspecting evidence of the corrupted state before mutating or re-running anything",
+        "Bounds which records are affected (a partition, a data shape, or a time window) to localize the cause",
+        "Traces how the incorrect state was produced as a mechanism rather than only correcting the visible values",
+        "Separates the immediate data correction from the durable fix and from prevention or detection"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Review this pull request for correctness and security. Report findings only.",
+    "should_trigger": true
+  },
+  {
+    "query": "Look over my uncommitted diff and identify any blocking bugs.",
+    "should_trigger": true
+  },
+  {
+    "query": "Audit this database migration patch for data loss and rollback risks.",
+    "should_trigger": true
+  },
+  {
+    "query": "Review the implementation of this architecture decision for reliability gaps.",
+    "should_trigger": true
+  },
+  {
+    "query": "Can you inspect this concurrency fix and tell me whether a race still exists?",
+    "should_trigger": true
+  },
+  {
+    "query": "Perform a code review of the authentication changes and rank findings by severity.",
+    "should_trigger": true
+  },
+  {
+    "query": "Check this dependency upgrade patch for compatibility and operational regressions.",
+    "should_trigger": true
+  },
+  {
+    "query": "Review this API change for breaking contracts and missing tests.",
+    "should_trigger": true
+  },
+  {
+    "query": "Find concrete defects in this patch; skip style comments.",
+    "should_trigger": true
+  },
+  {
+    "query": "Assess this rollout configuration change for production risks without editing it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix every issue in this pull request and update the tests.",
+    "should_trigger": false
+  },
+  {
+    "query": "Design a replacement architecture for the notification service.",
+    "should_trigger": false
+  },
+  {
+    "query": "Implement the account deletion endpoint.",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain what this function does.",
+    "should_trigger": false
+  },
+  {
+    "query": "Summarize the pull request description.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write tests for this already-understood bug.",
+    "should_trigger": false
+  },
+  {
+    "query": "Refactor this module to remove duplication.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create an ADR for our caching strategy.",
+    "should_trigger": false
+  },
+  {
+    "query": "Resolve the merge conflicts in this branch.",
+    "should_trigger": false
+  },
+  {
+    "query": "What does the CI failure mean and how should I fix it?",
+    "should_trigger": false
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "name": "apex",
+  "version": "0.1.0",
+  "description": "Portable senior-level workflows for designing, implementing, reviewing, and investigating software changes.",
+  "author": {
+    "name": "Ahmet Zeybek",
+    "url": "https://github.com/zeybek"
+  },
+  "homepage": "https://github.com/zeybek/apex",
+  "repository": "https://github.com/zeybek/apex",
+  "keywords": [
+    "software-engineering",
+    "architecture",
+    "implementation",
+    "code-review"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Apex",
+    "shortDescription": "Senior engineering workflows for software changes",
+    "longDescription": "Design, implement, review, and investigate software changes with language-independent, risk-based senior engineering judgment.",
+    "developerName": "Ahmet Zeybek",
+    "category": "Productivity",
+    "defaultPrompt": [
+      "Design this software change and evaluate its tradeoffs.",
+      "Implement this change end to end with risk-based verification.",
+      "Review this change for correctness and operational risk.",
+      "Investigate this failure and establish its root cause."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

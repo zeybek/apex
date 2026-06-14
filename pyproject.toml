@@ -1,0 +1,26 @@
+# Tooling configuration only. This repository is not a Python package; the two
+# validators in scripts/ are standard-library-only and require no install.
+
+[tool.pytest.ini_options]
+pythonpath = ["scripts"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["scripts"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if __name__ == .__main__.:"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["validate_package", "validate_distribution"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = true

@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a problem with a skill, validator, manifest, or the eval harness
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Describe the problem.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - A skill (apex-design / apex-implement / apex-review / apex-investigate)
+        - Activation / triggering
+        - Validators or packaging
+        - Eval harness
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: Client and version
+      description: Claude Code, Codex, or another skills-compatible client, plus the model if relevant.
+    validations:
+      required: false
+  - type: input
+    id: apex-version
+    attributes:
+      label: apex version or commit
+    validations:
+      required: false
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: Expected vs actual
+      description: What you expected, and what happened instead.
+    validations:
+      required: true

@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Add idempotency protection to the payment webhook and include regression tests.",
+    "should_trigger": true
+  },
+  {
+    "query": "This background job occasionally creates duplicate invoices. Find the cause, fix it, and verify the fix.",
+    "should_trigger": true
+  },
+  {
+    "query": "Refactor the shared cache client without changing its public behavior, then run the affected tests.",
+    "should_trigger": true
+  },
+  {
+    "query": "Upgrade the database driver and make any compatibility changes required by the repository.",
+    "should_trigger": true
+  },
+  {
+    "query": "Implement the new account deletion endpoint, including authorization and audit logging.",
+    "should_trigger": true
+  },
+  {
+    "query": "Our integration test is flaky only under parallel execution. Diagnose and resolve it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Migrate the stored status field to the new enum while keeping rolling deployments safe.",
+    "should_trigger": true
+  },
+  {
+    "query": "Wire the existing retry policy into the outbound email integration and verify failure behavior.",
+    "should_trigger": true
+  },
+  {
+    "query": "The API starts timing out after a few thousand records. Measure the path and implement a focused fix.",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix the tenant isolation vulnerability in this repository and add evidence that another tenant cannot access the data.",
+    "should_trigger": true
+  },
+  {
+    "query": "Review this pull request for security and correctness issues, but do not change any files.",
+    "should_trigger": false
+  },
+  {
+    "query": "Design an event-driven architecture for the new billing workflow and compare it with keeping the current monolith.",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain how the authentication middleware works.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write an ADR comparing PostgreSQL and DynamoDB for this service.",
+    "should_trigger": false
+  },
+  {
+    "query": "Summarize the uncommitted changes in this repository.",
+    "should_trigger": false
+  },
+  {
+    "query": "What are the common causes of race conditions?",
+    "should_trigger": false
+  },
+  {
+    "query": "Translate the README from English to Turkish.",
+    "should_trigger": false
+  },
+  {
+    "query": "Evaluate whether our proposed schema migration is safe; provide recommendations only.",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a product requirements document for account deletion.",
+    "should_trigger": false
+  },
+  {
+    "query": "Look at this patch and list only blocking review findings.",
+    "should_trigger": false
+  }
+]

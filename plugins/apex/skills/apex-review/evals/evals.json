@@ -1,0 +1,41 @@
+{
+  "skill_name": "apex-review",
+  "evals": [
+    {
+      "id": "authorization-review",
+      "prompt": "Review this change and report findings only:\n\n```python\ndef get_invoice(request, invoice_id):\n    user = require_login(request)\n    invoice = db.invoices.get(invoice_id)\n    return json(invoice)\n```\n\nThe route is used by customers from multiple organizations.",
+      "expected_output": "A high-severity finding identifying missing object-level authorization with a concrete cross-organization access path, precise location, impact, and focused remediation direction.",
+      "assertions": [
+        "The review reports missing object-level authorization as a concrete finding.",
+        "The finding explains that an authenticated user can request another organization's invoice by identifier.",
+        "Severity reflects sensitive cross-tenant data exposure.",
+        "The finding includes a focused remediation direction at the authoritative boundary.",
+        "The review does not apply a code fix or bury the issue under general commentary."
+      ]
+    },
+    {
+      "id": "migration-review",
+      "prompt": "Review this migration for a service deployed with rolling updates:\n\n```sql\nALTER TABLE orders ADD COLUMN state text NOT NULL DEFAULT 'new';\nUPDATE orders SET state = status;\nALTER TABLE orders DROP COLUMN status;\n```\n\nOld application instances still read and write status.",
+      "expected_output": "A high-severity compatibility and data-integrity finding explaining why dropping the old column in the same deployment breaks old instances, with expand-migrate-contract remediation direction.",
+      "assertions": [
+        "The review identifies old and new application coexistence as the triggering condition.",
+        "The review explains the concrete failure caused by dropping status while old instances use it.",
+        "The review addresses migration ordering and compatibility rather than only SQL syntax.",
+        "The finding recommends an additive migration and delayed cleanup or equivalent safe sequence.",
+        "The finding is prioritized above minor maintainability concerns."
+      ]
+    },
+    {
+      "id": "speculative-style-review",
+      "prompt": "Review this patch and report only actionable defects:\n\n```javascript\nfunction fullName(user) {\n  return `${user.firstName} ${user.lastName}`;\n}\n```\n\nThe repository guarantees both names are non-empty strings before this function is called.",
+      "expected_output": "No actionable findings, with a concise statement that the reviewed behavior is consistent with the stated contract and any residual verification limitation.",
+      "assertions": [
+        "The review does not invent null-handling, localization, or formatting defects that contradict the stated contract.",
+        "The review does not report personal style preferences as findings.",
+        "The response clearly states that no actionable findings were identified.",
+        "Any residual risk or test gap is presented as a limitation rather than a fabricated defect.",
+        "The review does not open a finding entry or assign an actionable severity to the fullName function."
+      ]
+    }
+  ]
+}
