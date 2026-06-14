@@ -4,6 +4,11 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/zeybek/apex/badge)](https://securityscorecards.dev/viewer/?uri=github.com/zeybek/apex)
 [![Release](https://img.shields.io/github/v/release/zeybek/apex?sort=semver)](https://github.com/zeybek/apex/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+<!-- OpenSSF Best Practices: register the repo at https://www.bestpractices.dev
+     (sign in with GitHub, then add github.com/zeybek/apex), replace NNNN with the
+     assigned project ID, and uncomment the badge below.
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/NNNN/badge)](https://www.bestpractices.dev/projects/NNNN)
+-->
 
 Apex gives your coding agent senior-engineering judgment for designing, implementing, reviewing, and investigating software changes. It ships as open [Agent Skills](https://agentskills.io/) that are language- and framework-agnostic and run in any skills-compatible agent — with ready-to-install plugins for Claude Code and Codex.
 
