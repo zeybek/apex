@@ -36,6 +36,18 @@
         "The recommendation states assumptions and evidence still needed.",
         "The decision includes reversibility or exit considerations."
       ]
+    },
+    {
+      "id": "one-line-feature-plan",
+      "prompt": "Build me a landing page.",
+      "expected_output": "A clarifying-question pass that resolves the genuinely ambiguous decisions, followed by a committed .apex-design/<slug>/ planning workspace with brief, requirements, design, plan, and progress artifacts carrying traceable decision, requirement, and task identifiers.",
+      "assertions": [
+        "The response asks targeted clarifying questions for genuinely ambiguous decisions such as audience, primary goal or call to action, and scope, rather than guessing or asking what the repository already answers.",
+        "Answered questions are recorded as numbered decisions, and measurable requirements are derived from them.",
+        "A persistent .apex-design/<slug>/ workspace is produced with separate brief, requirements, design, plan, and progress files.",
+        "The plan is a sequence of atomic, dependency-ordered tasks, each with a concrete verification and acceptance condition, traceable to the decisions and requirements.",
+        "The work treats even the one-line request as warranting a full, deliberate planning pass rather than jumping straight to code."
+      ]
     }
   ]
 }

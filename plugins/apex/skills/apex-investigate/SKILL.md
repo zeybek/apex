@@ -25,6 +25,7 @@ For active incidents and outages, read [incident-triage.md](references/incident-
 - Capture the affected inputs, users, environment, version, timing, and frequency.
 - Establish when it started and what changed around that time: deploys, configuration, data, dependencies, or traffic.
 - Distinguish a new failure from a long-standing one that was only just noticed.
+- When a `.apex-design/<slug>/` planning workspace covers the affected area, use its decisions and design as the intended-behavior baseline for what "expected" means.
 
 ### 3. Reproduce and bound
 

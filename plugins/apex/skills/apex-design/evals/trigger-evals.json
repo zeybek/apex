@@ -78,5 +78,45 @@
   {
     "query": "Generate release notes from the last ten commits.",
     "should_trigger": false
+  },
+  {
+    "query": "Build me a landing page.",
+    "should_trigger": true
+  },
+  {
+    "query": "Plan and scope a notifications feature for our app before we build it.",
+    "should_trigger": true
+  },
+  {
+    "query": "We want to add multi-tenant support — break this down into a detailed, sequenced plan.",
+    "should_trigger": true
+  },
+  {
+    "query": "Turn this one-line idea into a full technical plan: a public API for our reporting data.",
+    "should_trigger": true
+  },
+  {
+    "query": "Scope what it takes to add single sign-on and give me a step-by-step plan with acceptance criteria.",
+    "should_trigger": true
+  },
+  {
+    "query": "I need a comprehensive plan for moving our product search to a new provider before any code changes.",
+    "should_trigger": true
+  },
+  {
+    "query": "Implement the landing page exactly as the approved plan in our workspace specifies.",
+    "should_trigger": false
+  },
+  {
+    "query": "Execute the next task from our planning workspace and update the progress board.",
+    "should_trigger": false
+  },
+  {
+    "query": "The plan is already written and signed off — just build it.",
+    "should_trigger": false
+  },
+  {
+    "query": "Report the status of the tasks in our planning workspace.",
+    "should_trigger": false
   }
 ]

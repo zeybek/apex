@@ -78,5 +78,13 @@
   {
     "query": "Look at this patch and list only blocking review findings.",
     "should_trigger": false
+  },
+  {
+    "query": "Execute the plan in our .apex-design workspace, verify each task, and keep the progress board updated.",
+    "should_trigger": true
+  },
+  {
+    "query": "Write the .apex-design plan for this feature before we build anything.",
+    "should_trigger": false
   }
 ]

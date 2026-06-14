@@ -48,6 +48,22 @@ Using another skills-compatible agent (Cursor, OpenCode, Gemini CLI, and others)
 
 Each skill is a `SKILL.md` workflow under `plugins/apex/skills/`; deeper guidance lives in `references/` and loads only when relevant. Keeping the workflows separate keeps each one focused and lets only the relevant skill enter context.
 
+## Commands and the planning workspace
+
+In Claude Code, each skill is also a slash command, so a single-line request can drive the full workflow:
+
+| Command | What it does |
+|---|---|
+| `/apex-design <request>` | Ask clarifying questions and write a committed `.apex-design/<slug>/` planning workspace — even from a one-line brief |
+| `/apex-implement [slug]` | Execute the plan task by task, verify each, and keep its progress board current |
+| `/apex-progress [slug]` | Report status across `.apex-design/` initiatives: done, in progress, blocked, and what is next |
+| `/apex-review <target>` | Risk-first review, checked against the initiative's recorded design and requirements when present |
+| `/apex-investigate <symptom>` | Diagnose a failure to a root cause, using the recorded design as the intended-behavior baseline |
+
+`/apex-design` turns even "build me a landing page" into a deliberate plan: it discovers what the repository already answers, asks only the decisions it cannot infer, and persists a `.apex-design/<NNN-slug>/` folder with a brief, requirements, design, plan, and progress board. Stable identifiers — `D-` decisions, `R-` requirements, `T-` tasks — connect the reasoning across files. `/apex-implement` then executes that plan and keeps the progress board current, while review and investigation read the same workspace as shared context. The workspace is committed alongside the code as living project documentation.
+
+Other skills-compatible clients drive the same workflow through skill activation rather than slash commands; the resulting `.apex-design/` workspace is identical.
+
 ## Examples
 
 [`examples/`](examples/README.md) contains one client-neutral walkthrough for each skill. The implement and investigate walkthroughs include small standard-library workspaces plus deterministic verifier scripts, so you can exercise the workflow without changing the canonical example files.
@@ -69,6 +85,7 @@ Each skill is a `SKILL.md` workflow under `plugins/apex/skills/`; deeper guidanc
 The same `plugins/apex/skills/` directory backs every client; the client-specific manifests carry distribution metadata only and never duplicate skill instructions.
 
 - `plugins/apex/` — the portable plugin package (`SKILL.md`, `references/`, and `evals/` per skill);
+- `plugins/apex/commands/` — Claude Code slash-command wrappers (`/apex-design`, `/apex-implement`, `/apex-progress`, `/apex-review`, `/apex-investigate`) that pass arguments to the matching skill; they carry distribution-side phrasing only and never duplicate skill instructions;
 - `plugins/apex/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` — Claude Code packaging and marketplace;
 - `plugins/apex/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` — Codex packaging and marketplace.
 

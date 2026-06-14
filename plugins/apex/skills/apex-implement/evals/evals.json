@@ -36,6 +36,18 @@
         "Verification includes repeated or concurrency-relevant execution appropriate to the flake.",
         "Any remaining uncertainty is stated explicitly."
       ]
+    },
+    {
+      "id": "plan-workspace-execution",
+      "prompt": "Implement the active plan in our .apex-design workspace: work through its tasks in order, verify each one, and keep the progress board current.",
+      "expected_output": "A plan-driven implementation that reads the brief, requirements, design, and plan, executes tasks in dependency order, runs each task's verification, updates progress.md as it goes, and surfaces any divergence from the plan explicitly.",
+      "assertions": [
+        "The work reads the workspace's brief, requirements, design, and plan before changing code.",
+        "Tasks are implemented in dependency order, and each task's defined verification is run rather than assumed.",
+        "progress.md is updated as work proceeds, recording task status, outcomes, and any blockers or new decisions.",
+        "The change stays within the planned scope, and divergence from the plan or design is surfaced and recorded rather than applied silently.",
+        "Close-out reconciles finished work against the cited requirements and states residual risk."
+      ]
     }
   ]
 }

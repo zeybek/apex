@@ -1,6 +1,6 @@
 ---
 name: apex-implement
-description: Use this skill when implementing software changes end to end with language- and framework-independent senior engineering judgment. Apply it to features, bug fixes, refactors, debugging, integrations, migrations, configuration, dependencies, and production-facing code work that requires inspecting the existing system, controlling risk, preserving contracts, and verifying results. Do not use it for review-only or design-only requests.
+description: Use this skill when implementing software changes end to end with language- and framework-independent senior engineering judgment. Apply it to features, bug fixes, refactors, debugging, integrations, migrations, configuration, dependencies, executing a planned `.apex-design/<slug>/` workspace, and production-facing code work that requires inspecting the existing system, controlling risk, preserving contracts, and verifying results. Do not use it for review-only or design-only requests.
 license: MIT
 ---
 
@@ -17,7 +17,11 @@ Implement the requested outcome while controlling engineering risk. Treat simpli
 - Separate facts, assumptions, and unresolved decisions.
 - Identify explicit non-goals to prevent scope drift.
 
-### 2. Inspect before deciding
+### 2. Adopt an existing plan workspace
+
+When a `.apex-design/<slug>/` workspace exists for this work, it is the contract. Read [plan-execution.md](references/plan-execution.md), then read its `brief.md`, `requirements.md`, `design.md`, and `plan.md` before changing code. Implement the plan's tasks in dependency order, run each task's `verify` and confirm its `done` condition, and keep `progress.md` current as you go. If a task cannot be done as written or the design proves wrong, surface the divergence and update the plan and decisions explicitly rather than quietly building something else.
+
+### 3. Inspect before deciding
 
 - Trace the relevant behavior from entry point to side effects.
 - Find established patterns, ownership boundaries, test commands, and release conventions.
@@ -26,11 +30,11 @@ Implement the requested outcome while controlling engineering risk. Treat simpli
 
 For defects, incidents, flaky behavior, or unclear failures, read [debugging.md](references/debugging.md) and establish the cause before choosing a fix.
 
-### 3. Classify risk
+### 4. Classify risk
 
 Read [risk-model.md](references/risk-model.md) before changing anything beyond a local, reversible edit. Increase rigor when the change touches trust boundaries, sensitive data, persistent state, concurrency, distributed behavior, public contracts, migrations, or production delivery.
 
-### 4. Design the smallest coherent change
+### 5. Design the smallest coherent change
 
 - Prefer a local fix when the problem is local.
 - Prefer existing project patterns, standard facilities, and already-approved dependencies.
@@ -39,7 +43,7 @@ Read [risk-model.md](references/risk-model.md) before changing anything beyond a
 
 Read [implementation.md](references/implementation.md) when choosing between more than one reasonable approach. Read [security-privacy.md](references/security-privacy.md) whenever data, identity, permissions, untrusted input, secrets, or dependencies are involved.
 
-### 5. Implement end to end
+### 6. Implement end to end
 
 - Keep the diff focused and internally consistent.
 - Preserve externally observable behavior unless the change explicitly alters it.
@@ -47,20 +51,21 @@ Read [implementation.md](references/implementation.md) when choosing between mor
 - Handle failures at the boundary with enough context for recovery and diagnosis.
 - Do not hide uncertainty behind comments, broad exception handling, or silent fallback.
 
-### 6. Verify with proportional evidence
+### 7. Verify with proportional evidence
 
 Read [verification.md](references/verification.md) when deciding how much evidence the change needs. Start with focused checks, then broaden based on risk and blast radius. Inspect failures; do not merely run commands. Add regression evidence for defects and contract evidence for changed boundaries.
 
 For deployment, migration, reliability, or distributed-system changes, also read [production-readiness.md](references/production-readiness.md).
 
-### 7. Close the loop
+### 8. Close the loop
 
 State:
 
 - what behavior changed;
 - why the chosen approach fits the existing system;
 - what was verified and the results;
-- any unverified assumptions, limitations, or residual risk.
+- any unverified assumptions, limitations, or residual risk;
+- when a plan workspace drove the work, that `progress.md` reflects the final task status, outcomes, and any recorded divergences.
 
 Do not present optional future work as required work. Do not claim completion while required verification or implementation remains.
 

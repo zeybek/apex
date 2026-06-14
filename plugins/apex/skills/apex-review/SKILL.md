@@ -16,6 +16,7 @@ Find concrete defects and material risks introduced or exposed by the change. Pr
 - Inspect the complete diff and enough surrounding code to understand behavior.
 - Identify the intended outcome, affected contracts, consumers, data, and production paths.
 - Run focused checks or inspect history when they materially improve confidence.
+- When a `.apex-design/<slug>/` planning workspace covers this change, review the diff against its `design.md` and `requirements.md`, and flag where the implementation diverges from the recorded decisions or fails an acceptance scenario.
 
 ### 2. Build a risk map
 
