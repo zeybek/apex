@@ -1,0 +1,11 @@
+# Top-level development tooling (human-edited source). The runtime validators
+# need none of this — they are standard-library only.
+#
+# requirements-dev.txt is the hash-pinned lock generated from this file.
+# After editing the pins below, regenerate it:
+#   uvx --python 3.12 --from pip-tools pip-compile --generate-hashes \
+#     --no-header --strip-extras --output-file=requirements-dev.txt requirements-dev.in
+pytest>=9.1.0
+pytest-cov>=7.1.0
+ruff>=0.15.17
+mypy>=2.1.0
