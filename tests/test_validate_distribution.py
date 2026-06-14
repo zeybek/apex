@@ -1,5 +1,7 @@
 """Tests for the distribution-validator helpers + an integration run."""
 
+import json
+
 import validate_distribution as vd
 
 
@@ -91,7 +93,8 @@ def test_real_repository_passes_distribution_validation():
 
 
 def test_main_accepts_matching_release_tag():
-    assert vd.main(["--tag", "v0.1.0"]) == 0
+    version = json.loads(vd.RELEASE_MANIFEST_PATH.read_text(encoding="utf-8"))["."]
+    assert vd.main(["--tag", f"v{version}"]) == 0
 
 
 def test_main_rejects_mismatched_release_tag(capsys):
