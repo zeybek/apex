@@ -1,6 +1,7 @@
 ---
 name: apex-review
 description: Use this skill when asked to review code, a diff, pull request, patch, migration, design implementation, or repository change. Perform a language- and framework-independent, risk-first review for correctness, security, data integrity, concurrency, compatibility, reliability, maintainability, performance, and missing verification. Report actionable findings by severity and location; do not use it to implement fixes unless explicitly requested.
+license: MIT
 ---
 
 # Apex Review

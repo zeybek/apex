@@ -1,6 +1,7 @@
 ---
 name: apex-investigate
 description: Use this skill when investigating a failure whose cause is not yet known — a production incident or outage, a regression, an intermittent or flaky failure, a performance degradation, corrupted or surprising data, or a bug report you must diagnose before fixing. Apply it to triage severity and mitigation, gather and preserve evidence, form and test hypotheses, bisect and localize the cause across components and time, read logs, metrics, and traces, confirm a root cause by mechanism, and record findings in a blameless writeup. Do not use it when the change is already understood and only needs implementation (use apex-implement) or when reviewing a proposed change (use apex-review).
+license: MIT
 ---
 
 # Apex Investigate

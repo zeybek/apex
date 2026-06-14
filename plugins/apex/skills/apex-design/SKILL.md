@@ -1,6 +1,7 @@
 ---
 name: apex-design
 description: Use this skill when designing or evaluating a non-trivial software change before implementation. Apply it to architecture decisions, technical designs, API or schema evolution, data migrations, service boundaries, build-versus-buy choices, and reliability planning that require explicit requirements, alternatives, risks, contracts, and operational tradeoffs. Do not use it when the user only wants implementation of an already-decided change.
+license: MIT
 ---
 
 # Apex Design

@@ -1,6 +1,7 @@
 ---
 name: apex-implement
 description: Use this skill when implementing software changes end to end with language- and framework-independent senior engineering judgment. Apply it to features, bug fixes, refactors, debugging, integrations, migrations, configuration, dependencies, and production-facing code work that requires inspecting the existing system, controlling risk, preserving contracts, and verifying results. Do not use it for review-only or design-only requests.
+license: MIT
 ---
 
 # Apex Implement
