@@ -4,7 +4,7 @@ A planning workspace turns a design into durable, reviewable project documents t
 
 ## Layout
 
-```
+```text
 .apex-design/
   README.md                     index of initiatives and how the workspace works
   <NNN-slug>/                    one folder per initiative, e.g. 001-landing-page
@@ -35,7 +35,7 @@ Use these as templates. Replace every `<fill: …>` marker with real content; de
 
 ### brief.md
 
-```
+```text
 # <fill: initiative title>
 
 - Status: drafting | planned | in progress | done | superseded
@@ -66,7 +66,7 @@ Use these as templates. Replace every `<fill: …>` marker with real content; de
 
 ### requirements.md
 
-```
+```text
 # Requirements — <fill: initiative title>
 
 Each requirement is observable or measurable and names the decisions it rests on.
@@ -82,7 +82,7 @@ Each requirement is observable or measurable and names the decisions it rests on
 
 This is the decision record. Follow [decision-record.md](decision-record.md) for the full structure. At minimum capture:
 
-```
+```text
 # Design — <fill: initiative title>
 
 ## Recommendation
@@ -108,7 +108,7 @@ This is the decision record. Follow [decision-record.md](decision-record.md) for
 
 Tasks are atomic, ordered by dependency and reversibility, and independently verifiable.
 
-```
+```text
 # Plan — <fill: initiative title>
 
 - T-01 — <fill: task title>
@@ -130,7 +130,7 @@ Tasks are atomic, ordered by dependency and reversibility, and independently ver
 
 The implementation workflow keeps this current. Initialize every task as pending.
 
-```
+```text
 # Progress — <fill: initiative title>
 
 - Updated: <fill: date>
@@ -149,7 +149,7 @@ The implementation workflow keeps this current. Initialize every task as pending
 
 ### README.md (workspace index)
 
-```
+```text
 # Planning workspace
 
 This folder holds design and planning documents for non-trivial changes. Each
