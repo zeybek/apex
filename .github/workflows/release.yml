@@ -67,7 +67,29 @@ jobs:
               --output-signature "${f}.sig" \
               --output-certificate "${f}.pem" "${f}"
           done
-      - name: Upload archive and signatures to release
+      - name: Attach SLSA provenance bundle to the release
+        # The attest step above stores the provenance in the repository's
+        # attestation store. Also publish it next to the archive as
+        # <archive>.intoto.jsonl (the Sigstore bundle wrapping the in-toto
+        # SLSA provenance statement) so consumers can verify offline and
+        # release scanners such as OpenSSF Scorecard can find it.
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${TAG}" apex-*.tar.gz apex-*.tar.gz.sig apex-*.tar.gz.pem
+        run: |
+          for f in apex-*.tar.gz; do
+            for attempt in 1 2 3 4 5; do
+              rm -f sha256*.jsonl
+              if gh attestation download "${f}" --repo "${GITHUB_REPOSITORY}" \
+                   --predicate-type https://slsa.dev/provenance/v1; then
+                bundle=$(ls sha256*.jsonl | head -n 1)
+                [ -n "${bundle}" ] && mv "${bundle}" "${f}.intoto.jsonl" && break
+              fi
+              echo "attestation not available yet (attempt ${attempt}); retrying" >&2
+              sleep 10
+            done
+            test -s "${f}.intoto.jsonl"
+          done
+      - name: Upload archive, signatures, and provenance to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${TAG}" apex-*.tar.gz apex-*.tar.gz.sig apex-*.tar.gz.pem apex-*.tar.gz.intoto.jsonl
