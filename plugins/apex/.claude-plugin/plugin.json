@@ -15,6 +15,5 @@
     "code-review",
     "domain-driven-design",
     "hooks"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }

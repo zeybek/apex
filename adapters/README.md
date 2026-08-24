@@ -27,7 +27,7 @@ The native plugins expose all four skills from the shared `plugins/apex/skills/`
 | `hooks/hooks.json` (`SessionStart`, `Stop`) | Runs once the plugin is enabled; the plugin root is `${CLAUDE_PLUGIN_ROOT}` | Discovered from the plugin, but **skipped until you review and trust the hook definition** in Codex; the plugin root is `PLUGIN_ROOT` | Not loaded; copy the two scripts and wire them into the client's own hook mechanism if it has one |
 | `agents/*.md` | Loaded as `apex:apex-reviewer` and `apex:apex-investigator` | Not supported by the Codex plugin format | Not loaded |
 
-The hook commands resolve the plugin root as `${CLAUDE_PLUGIN_ROOT:-$PLUGIN_ROOT}`, so the same `hooks.json` works on both clients, and exit quietly when `python3` is not on `PATH`.
+The hook commands resolve the plugin root as `${CLAUDE_PLUGIN_ROOT:-$PLUGIN_ROOT}`, so the same `hooks.json` works on both clients, and exit quietly when `python3` is not on `PATH`. Both clients discover `hooks/hooks.json` automatically; the plugin manifests deliberately do not declare it (Claude Code rejects a plugin whose manifest re-declares the auto-loaded file as a duplicate), and the distribution validator enforces that.
 
 ## Discovery Matrix
 

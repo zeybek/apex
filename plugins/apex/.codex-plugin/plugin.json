@@ -16,7 +16,6 @@
     "domain-driven-design",
     "hooks"
   ],
-  "hooks": "./hooks/hooks.json",
   "skills": "./skills/",
   "interface": {
     "displayName": "Apex",

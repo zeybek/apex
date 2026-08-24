@@ -3,6 +3,7 @@
 """Tests for the distribution-validator helpers + an integration run."""
 
 import json
+import shutil
 
 import validate_distribution as vd
 
@@ -110,3 +111,28 @@ def test_main_flags_release_manifest_drift(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(vd, "RELEASE_MANIFEST_PATH", drifted)
     assert vd.main([]) == 1
     assert "release-please-manifest.json" in capsys.readouterr().err
+
+
+def test_manifest_must_not_redeclare_auto_loaded_hooks_file(tmp_path, monkeypatch, capsys):
+    """Claude Code auto-loads hooks/hooks.json; a manifest that re-declares it fails to load."""
+    plugin = tmp_path / "apex"
+    shutil.copytree(vd.PLUGIN_ROOT, plugin)
+    manifest = plugin / ".claude-plugin" / "plugin.json"
+    data = json.loads(manifest.read_text(encoding="utf-8"))
+    data["hooks"] = "./hooks/hooks.json"
+    manifest.write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setattr(vd, "PLUGIN_ROOT", plugin)
+    assert vd.main([]) == 1
+    assert "must not declare the auto-loaded hooks/hooks.json" in capsys.readouterr().err
+
+
+def test_manifest_hooks_path_must_exist(tmp_path, monkeypatch, capsys):
+    plugin = tmp_path / "apex"
+    shutil.copytree(vd.PLUGIN_ROOT, plugin)
+    manifest = plugin / ".codex-plugin" / "plugin.json"
+    data = json.loads(manifest.read_text(encoding="utf-8"))
+    data["hooks"] = "./hooks/extra-hooks.json"
+    manifest.write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setattr(vd, "PLUGIN_ROOT", plugin)
+    assert vd.main([]) == 1
+    assert "hooks path does not exist" in capsys.readouterr().err
