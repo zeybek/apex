@@ -27,13 +27,16 @@ Only the latest minor release line receives fixes; upgrade to the newest release
 
 ## Threat model and scope
 
-Apex skills are **instructions, not executable code**. The installed plugin under `plugins/apex/` contains Markdown (`SKILL.md`, `references/`) plus JSON manifests and evals. The skills do not execute code, make network calls, or read credentials on their own; any such action is performed by the host agent under its own permissions.
+Apex skills are **instructions, not executable code**. The installed plugin under `plugins/apex/` contains Markdown (`SKILL.md`, `references/`, `agents/`) plus JSON manifests and evals. The skills do not execute code, make network calls, or read credentials on their own; any such action is performed by the host agent under its own permissions.
+
+The one executable part of the plugin is `plugins/apex/hooks/`: two standard-library Python scripts that the host runs on `SessionStart` and `Stop`. They read the working directory's `.apex-design/` files and `git status`, print text to stdout or stderr, and exit. They do not write files, open network connections, read environment secrets, or run anything other than `git status`. The package validator rejects any hook that is not a `command` running a script shipped inside the plugin, and CI type-checks, lints, and tests the scripts like the validators.
 
 The repository also contains two dependency-free Python validators that run offline and a developer-run eval harness. The harness uses an offline stub by default, but its `claude-code` client explicitly shells a configured host-agent CLI when selected.
 
 In scope:
 
-- skill or reference content that could lead an agent to take an unintended or unsafe action, including text that tries to override the agent's current task;
+- skill, reference, or agent content that could lead an agent to take an unintended or unsafe action, including text that tries to override the agent's current task;
+- the hook scripts doing anything beyond reading the workspace and git status and printing text, or a hook definition that runs something not shipped in the plugin;
 - plugin/marketplace manifests with incorrect or unsafe metadata;
 - defects in the Python validators or eval harness (unsafe parsing, incorrect gating, or misleading benchmark output).
 

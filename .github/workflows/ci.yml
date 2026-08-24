@@ -39,7 +39,7 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: pip install --require-hashes -r requirements-dev.txt
-      - run: pytest -q --cov=scripts --cov-report=term-missing
+      - run: pytest -q --cov=scripts --cov=plugins/apex/hooks --cov-report=term-missing
       - name: Coverage summary
         if: ${{ !cancelled() }}
         run: |
@@ -48,9 +48,9 @@ jobs:
             echo
             coverage report --format=markdown 2>/dev/null || coverage report
           } >> "$GITHUB_STEP_SUMMARY"
-      - run: ruff check scripts tests
-      - run: ruff format --check scripts tests
-      - run: mypy scripts tests
+      - run: ruff check scripts tests plugins/apex/hooks
+      - run: ruff format --check scripts tests plugins/apex/hooks
+      - run: mypy scripts tests plugins/apex/hooks
 
   official:
     name: Official skills-ref validation

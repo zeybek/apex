@@ -1,7 +1,7 @@
 {
   "name": "apex",
   "version": "0.4.0",
-  "description": "Portable senior-level workflows for designing, implementing, reviewing, and investigating software changes.",
+  "description": "Portable senior-level workflows for designing, implementing, reviewing, and investigating software changes, with planning-workspace hooks and read-only review and investigation agents.",
   "author": {
     "name": "Ahmet Zeybek",
     "url": "https://github.com/zeybek"
@@ -12,6 +12,9 @@
     "software-engineering",
     "architecture",
     "implementation",
-    "code-review"
-  ]
+    "code-review",
+    "domain-driven-design",
+    "hooks"
+  ],
+  "hooks": "./hooks/hooks.json"
 }

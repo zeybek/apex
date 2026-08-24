@@ -17,4 +17,4 @@ validate-official:
 	done
 
 test:
-	uvx --with pytest-cov pytest tests/ --cov=scripts --cov-report=term-missing
+	uvx --with pytest-cov pytest tests/ --cov=scripts --cov=plugins/apex/hooks --cov-report=term-missing

@@ -21,6 +21,7 @@ Review is risk-first. The reviewer reads the whole diff plus enough surrounding 
    - ships eval changes alongside behavior changes: new or changed instructions get trigger and output cases.
 3. **Tooling** (`scripts/`, `tests/`, `schemas/`): correctness of the gate being changed, tests that fail before and pass after, no new runtime dependencies in the validators, types and lint clean under the strict configuration.
 4. **Supply chain** (`.github/workflows/**`, `requirements-dev.*`, `dependabot.yml`): actions pinned to full commit SHAs with a version comment, least-privilege `permissions`, hash-pinned Python requirements, no secrets or tokens in logs.
+   - **Hooks and agents** (`plugins/apex/hooks/**`, `plugins/apex/agents/**`) are the parts that run on or steer a user's machine: hook scripts stay standard-library and read-only (workspace files and `git status` only, text output only), `hooks.json` runs only shipped scripts, and agent prompts keep file-editing tools disallowed. Any widening of that surface is a security-review trigger.
 5. **Docs and manifests**: README, adapters, and manifests still describe what the package does; version fields are never edited by hand.
 6. **Security review triggers**: any change to SECURITY.md, the validators' scan patterns, release signing or attestation, or branch and tag rules gets an explicit note in the review that the threat model in [ASSURANCE_CASE.md](ASSURANCE_CASE.md) still holds.
 

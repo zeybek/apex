@@ -18,7 +18,16 @@ claude plugin install apex@apex
 
 Replace `zeybek/apex` with a local repository path while developing changes.
 
-The native plugins expose all four skills from the shared `plugins/apex/skills/` directory. Use the discovery paths below for clients that support Agent Skills but do not consume either plugin manifest.
+The native plugins expose all four skills from the shared `plugins/apex/skills/` directory, plus the hooks under `plugins/apex/hooks/` and, on Claude Code, the agents under `plugins/apex/agents/`. Use the discovery paths below for clients that support Agent Skills but do not consume either plugin manifest.
+
+## Hooks and agents per client
+
+| Component | Claude Code | Codex | Other Agent-Skills clients |
+|---|---|---|---|
+| `hooks/hooks.json` (`SessionStart`, `Stop`) | Runs once the plugin is enabled; the plugin root is `${CLAUDE_PLUGIN_ROOT}` | Discovered from the plugin, but **skipped until you review and trust the hook definition** in Codex; the plugin root is `PLUGIN_ROOT` | Not loaded; copy the two scripts and wire them into the client's own hook mechanism if it has one |
+| `agents/*.md` | Loaded as `apex:apex-reviewer` and `apex:apex-investigator` | Not supported by the Codex plugin format | Not loaded |
+
+The hook commands resolve the plugin root as `${CLAUDE_PLUGIN_ROOT:-$PLUGIN_ROOT}`, so the same `hooks.json` works on both clients, and exit quietly when `python3` is not on `PATH`.
 
 ## Discovery Matrix
 

@@ -12,13 +12,16 @@ plugins/apex/
   skills/<name>/references/*.md   on-demand depth, loaded only when SKILL.md says to
   skills/<name>/evals/            trigger-evals.json and evals.json for that skill
   commands/*.md                   Claude Code slash-command wrappers (distribution-side phrasing only)
+  hooks/hooks.json                SessionStart and Stop hooks (Claude Code and Codex)
+  hooks/*.py                      the hook scripts: standard-library, read-only
+  agents/*.md                     read-only reviewer and investigator subagents (Claude Code)
   .claude-plugin/plugin.json      Claude Code packaging metadata
   .codex-plugin/plugin.json       Codex packaging metadata and install-surface UI text
 ```
 
-Everything a host agent loads is Markdown or JSON. The package contains no executable code, makes no network calls, and reads no credentials; whatever an agent does with the instructions happens under the host's own permissions. That single fact drives the security model in [ASSURANCE_CASE.md](ASSURANCE_CASE.md).
+Everything a host agent loads is Markdown or JSON, except the two hook scripts, which are standard-library Python that read the workspace and `git status` and print text. Nothing in the package makes network calls or reads credentials; whatever an agent does with the instructions happens under the host's own permissions. That fact drives the security model in [ASSURANCE_CASE.md](ASSURANCE_CASE.md).
 
-The four skills — `apex-design`, `apex-implement`, `apex-review`, `apex-investigate` — share one artifact: the `.apex-design/<NNN-slug>/` **planning workspace** that `apex-design` writes into a user's repository and the other three read (brief, glossary, requirements, design, plan, progress). It is the only coupling between skills, and it is a documented file layout rather than code.
+The four skills — `apex-design`, `apex-implement`, `apex-review`, `apex-investigate` — share one artifact: the `.apex-design/<NNN-slug>/` **planning workspace** that `apex-design` writes into a user's repository and the other three read (brief, glossary, requirements, design, plan, progress). It is the only coupling between skills, and it is a documented file layout rather than code. The hooks read the same layout: `apex_session_context.py` renders the active initiative's digest, glossary, position, and next task into context at session start, and `apex_stop_guard.py` refuses to end a turn that changed code while an in-progress initiative's `progress.md` stayed untouched. The two agents preload `apex-review` and `apex-investigate` and run them with file-editing tools removed.
 
 ## Distribution surfaces
 

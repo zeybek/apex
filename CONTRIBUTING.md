@@ -19,9 +19,10 @@ make validate-official   # official skills-ref validation (needs network + uvx)
 
 - Run `make validate` and `make validate-official`; both must pass.
 - Keep every skill body language- and framework-agnostic. Small stack-specific walkthroughs may live under `examples/`, outside the distributed plugin, when they demonstrate a skill without becoming skill instructions.
+- Keep hooks read-only and standard-library only: a hook may read the workspace and `git status` and print text, nothing else, and `hooks.json` may only run scripts shipped under `plugins/apex/hooks/` (the validator enforces this).
 - Keep `SKILL.md` under 500 lines and push depth into `references/`, loaded with explicit `Read <file> when <condition>` triggers.
 - Reference links must be one level deep and resolve.
-- Add tests with the change: new or changed behavior in `scripts/` must come with tests in `tests/` (run `make test`), and a new or changed skill must come with its `evals/` cases. CI runs the full test suite, `ruff`, and `mypy` on every pull request and blocks on warnings; a change that lowers coverage or introduces a warning is not ready to merge.
+- Add tests with the change: new or changed behavior in `scripts/` or `plugins/apex/hooks/` must come with tests in `tests/` (run `make test`), and a new or changed skill must come with its `evals/` cases. CI runs the full test suite, `ruff`, and `mypy` on every pull request and blocks on warnings; a change that lowers coverage or introduces a warning is not ready to merge.
 
 ## Changing or adding a skill
 

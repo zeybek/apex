@@ -1,0 +1,27 @@
+{
+  "description": "Apex planning-workspace hooks: load the active initiative's decision digest, glossary, and next task into context when a session starts; refuse to finish a turn that changed code without updating the initiative's progress board.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v python3 >/dev/null 2>&1 || exit 0; exec python3 \"${CLAUDE_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/apex_session_context.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v python3 >/dev/null 2>&1 || exit 0; exec python3 \"${CLAUDE_PLUGIN_ROOT:-$PLUGIN_ROOT}/hooks/apex_stop_guard.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
