@@ -148,6 +148,11 @@ def main(argv: list[str] | None = None) -> int:
             REPOSITORY_URL,
         )
 
+    for label, manifest in (("Codex plugin", codex_manifest), ("Claude plugin", claude_manifest)):
+        hooks = manifest.get("hooks")
+        if hooks is not None and not (PLUGIN_ROOT / str(hooks)).is_file():
+            errors.append(f"{label} hooks path does not exist: {hooks!r}")
+
     codex_entry = find_plugin(codex_marketplace, codex_marketplace_path, errors)
     require_subset(
         errors,

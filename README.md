@@ -8,7 +8,7 @@
 
 Apex gives your coding agent senior-engineering judgment for designing, implementing, reviewing, and investigating software changes. It ships as open [Agent Skills](https://agentskills.io/) that are language- and framework-agnostic and run in any skills-compatible agent — with ready-to-install plugins for Claude Code and Codex.
 
-Four focused skills activate only when the task calls for them, alongside an optional always-on engineering constitution. Repository: [github.com/zeybek/apex](https://github.com/zeybek/apex).
+Four focused skills activate only when the task calls for them, alongside two planning-workspace hooks, two read-only agents, and an optional always-on engineering constitution. Repository: [github.com/zeybek/apex](https://github.com/zeybek/apex).
 
 ## Install
 
@@ -76,6 +76,28 @@ In Claude Code, each skill is also a slash command, so a single-line request can
 
 Other skills-compatible clients drive the same workflow through skill activation rather than slash commands; the resulting `.apex-design/` workspace is identical.
 
+## Hooks: the workspace follows you into every session
+
+Two small hooks keep the `.apex-design/` workspace alive across sessions. Both are standard-library Python scripts shipped in `plugins/apex/hooks/`, read-only, offline, and silent when there is no workspace.
+
+| Hook | When | What it does |
+|---|---|---|
+| `apex_session_context.py` | `SessionStart` (new, resumed, cleared, or compacted session) | Prints the active initiative's decision digest, glossary (the names to use, the synonyms to avoid), decision owner and domain expert, current position, and next pending task, so the agent starts with the team's model in context instead of rediscovering it. |
+| `apex_stop_guard.py` | `Stop` | If an initiative is `in progress`, the working tree changed outside `.apex-design/`, and that initiative's `progress.md` was not touched, it blocks the stop once with a reason, so the progress board and owner handoff get written before the turn ends. It never blocks twice in a row, never blocks outside a git repository, and never writes. |
+
+Claude Code runs plugin hooks once the plugin is enabled; Codex asks you to review and trust each plugin hook before it runs (see [adapters/README.md](adapters/README.md)). Both hooks need `python3` on `PATH`; without it they exit quietly.
+
+## Agents: review and diagnosis in an isolated context
+
+Two subagents (Claude Code) run the review and investigation workflows in a separate context that cannot edit files:
+
+| Agent | Preloads | Tools |
+|---|---|---|
+| `apex:apex-reviewer` | `apex-review` | Read, Grep, Glob, Bash (read-only use) — no Write or Edit |
+| `apex:apex-investigator` | `apex-investigate` | Read, Grep, Glob, Bash (read-only use) — no Write or Edit |
+
+Delegate to them when you want a review that does not share the implementing session's assumptions, or a diagnosis kept separate from the fix. Their reports come back as findings or an evidence chain for the main session (or `/apex-implement`) to act on.
+
 ## Examples
 
 [`examples/`](examples/README.md) contains one client-neutral walkthrough for each skill. The implement and investigate walkthroughs include small standard-library workspaces plus deterministic verifier scripts, so you can exercise the workflow without changing the canonical example files.
@@ -99,6 +121,8 @@ The same `plugins/apex/skills/` directory backs every client; the client-specifi
 
 - `plugins/apex/` — the portable plugin package (`SKILL.md`, `references/`, and `evals/` per skill);
 - `plugins/apex/commands/` — Claude Code slash-command wrappers (`/apex-design`, `/apex-implement`, `/apex-progress`, `/apex-review`, `/apex-investigate`) that pass arguments to the matching skill; they carry distribution-side phrasing only and never duplicate skill instructions;
+- `plugins/apex/hooks/` — `hooks.json` plus the two standard-library hook scripts, loaded by Claude Code and Codex;
+- `plugins/apex/agents/` — the read-only reviewer and investigator subagents (Claude Code);
 - `plugins/apex/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` — Claude Code packaging and marketplace;
 - `plugins/apex/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` — Codex packaging and marketplace.
 
@@ -119,7 +143,7 @@ Run them in clean sessions and compare `with_skill` against a `baseline` (no ski
 make validate
 ```
 
-The dependency-free validators check skill structure, frontmatter constraints, local references, progressive-disclosure limits, platform-neutral content, eval schemas, plugin manifests, and marketplace catalogs. To also validate the core format against the official reference implementation (requires network access):
+The dependency-free validators check skill structure, frontmatter constraints, local references, progressive-disclosure limits, platform-neutral content, eval schemas, hook definitions (known events, command-only, every command runs a script that ships with the plugin), agent frontmatter, plugin manifests, and marketplace catalogs. To also validate the core format against the official reference implementation (requires network access):
 
 ```bash
 make validate-official
@@ -129,7 +153,7 @@ This pins a specific `skills-ref` commit for reproducibility. `skills-ref` is a 
 
 ## Security
 
-Apex skills are instructions, not executable code. The installed plugin is Markdown and JSON and does not execute code, make network calls, or read credentials on its own. The repository also contains two dependency-free offline validators and a developer-run eval harness that can explicitly invoke a configured agent client. The package validator scans skill and reference text for prompt-injection signatures, so instruction content cannot quietly redirect an agent. See [SECURITY.md](SECURITY.md) for how to report an issue, [docs/ASSURANCE_CASE.md](docs/ASSURANCE_CASE.md) for the threat model and the argument that the security requirements hold, and [docs/RELEASING.md](docs/RELEASING.md) for how to verify a signed, provenance-attested release.
+Apex skills are instructions, not executable code. The only executable parts of the installed plugin are the two hook scripts under `plugins/apex/hooks/`: standard-library Python that reads the working directory's `.apex-design/` and `git status`, prints text, makes no network calls, and reads no credentials; the package validator rejects any hook that is not a command running a script shipped inside the plugin. The repository also contains two dependency-free offline validators and a developer-run eval harness that can explicitly invoke a configured agent client. The package validator scans skill and reference text for prompt-injection signatures, so instruction content cannot quietly redirect an agent. See [SECURITY.md](SECURITY.md) for how to report an issue, [docs/ASSURANCE_CASE.md](docs/ASSURANCE_CASE.md) for the threat model and the argument that the security requirements hold, and [docs/RELEASING.md](docs/RELEASING.md) for how to verify a signed, provenance-attested release.
 
 ## Project documentation
 

@@ -2,11 +2,11 @@
 # validators in scripts/ are standard-library-only and require no install.
 
 [tool.pytest.ini_options]
-pythonpath = ["scripts"]
+pythonpath = ["scripts", "plugins/apex/hooks"]
 testpaths = ["tests"]
 
 [tool.coverage.run]
-source = ["scripts"]
+source = ["scripts", "plugins/apex/hooks"]
 
 [tool.coverage.report]
 exclude_lines = ["pragma: no cover", "if __name__ == .__main__.:"]
@@ -50,7 +50,7 @@ warn_unused_ignores = true
 # Tests stay strict on types they use but are not required to annotate every
 # fixture-driven test function; the production scripts are fully annotated.
 # mypy wildcards must be whole dotted components, so the test modules are listed.
-module = ["conftest", "test_examples", "test_run_evals", "test_validate_distribution", "test_validate_package"]
+module = ["conftest", "test_examples", "test_hooks", "test_run_evals", "test_validate_distribution", "test_validate_package"]
 disallow_untyped_defs = false
 disallow_untyped_calls = false
 disallow_incomplete_defs = false

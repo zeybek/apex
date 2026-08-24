@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -13,7 +14,23 @@ from typing import Any
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS_ROOT = ROOT / "plugins" / "apex" / "skills"
+PLUGIN_ROOT = ROOT / "plugins" / "apex"
+SKILLS_ROOT = PLUGIN_ROOT / "skills"
+HOOK_EVENTS = {
+    "SessionStart",
+    "SessionEnd",
+    "UserPromptSubmit",
+    "PreToolUse",
+    "PostToolUse",
+    "PermissionRequest",
+    "PreCompact",
+    "PostCompact",
+    "SubagentStart",
+    "SubagentStop",
+    "Stop",
+    "Notification",
+}
+PLUGIN_ROOT_REF = re.compile(r"\$\{?(?:CLAUDE_)?PLUGIN_ROOT(?::-\$PLUGIN_ROOT)?\}?/([^\s\"']+)")
 NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER_PATTERN = re.compile(r"\A---\n(.*?)\n---(?:\n|\Z)", re.DOTALL)
 MARKDOWN_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
@@ -280,6 +297,88 @@ def validate_evals(skill_dir: Path, skill_name: str, errors: list[str]) -> None:
             error(errors, output_file, f"case {index} needs at least 3 assertions")
 
 
+def validate_hooks(plugin_root: Path, errors: list[str]) -> int:
+    """Validate hooks/hooks.json: shape, known events, and shipped script paths.
+
+    Hooks are the only executable part of the package, so every command must
+    point at a file that actually ships with the plugin.
+    """
+    hooks_file = plugin_root / "hooks" / "hooks.json"
+    if not hooks_file.is_file():
+        return 0
+    data = load_json(hooks_file, errors)
+    if not isinstance(data, dict) or not isinstance(data.get("hooks"), dict):
+        error(errors, hooks_file, "root must be an object with a 'hooks' object")
+        return 0
+    count = 0
+    for event, groups in data["hooks"].items():
+        if event not in HOOK_EVENTS:
+            error(errors, hooks_file, f"unknown hook event {event!r}")
+        if not isinstance(groups, list):
+            error(errors, hooks_file, f"{event}: must be a list of matcher groups")
+            continue
+        for group in groups:
+            hooks = group.get("hooks") if isinstance(group, dict) else None
+            if not isinstance(hooks, list) or not hooks:
+                error(errors, hooks_file, f"{event}: each group needs a non-empty 'hooks' list")
+                continue
+            for hook in hooks:
+                if not isinstance(hook, dict) or hook.get("type") != "command":
+                    error(errors, hooks_file, f"{event}: only 'command' hooks are allowed")
+                    continue
+                command = hook.get("command")
+                if not isinstance(command, str) or not command.strip():
+                    error(errors, hooks_file, f"{event}: command must be a non-empty string")
+                    continue
+                if not isinstance(hook.get("timeout"), int):
+                    error(errors, hooks_file, f"{event}: every hook needs an integer timeout")
+                refs = PLUGIN_ROOT_REF.findall(command)
+                if not refs:
+                    error(
+                        errors,
+                        hooks_file,
+                        f"{event}: command must run a script shipped under the plugin root",
+                    )
+                for ref in refs:
+                    target = plugin_root / ref
+                    if not target.is_file():
+                        error(
+                            errors, hooks_file, f"{event}: referenced script does not exist: {ref}"
+                        )
+                    elif target.suffix == ".py" and not os.access(target, os.X_OK):
+                        error(errors, hooks_file, f"{event}: script is not executable: {ref}")
+                count += 1
+    validate_injection_signatures(plugin_root / "hooks", errors)
+    validate_secret_signatures(plugin_root / "hooks", errors)
+    return count
+
+
+def validate_agents(plugin_root: Path, errors: list[str]) -> int:
+    """Validate agents/*.md: frontmatter name matches the file, description present."""
+    agents_dir = plugin_root / "agents"
+    if not agents_dir.is_dir():
+        return 0
+    count = 0
+    for agent_file in sorted(agents_dir.rglob("*.md")):
+        fields, _body = parse_frontmatter(agent_file, errors)
+        name = fields.get("name", "")
+        if not name:
+            error(errors, agent_file, "name is required")
+        elif not NAME_PATTERN.fullmatch(name):
+            error(errors, agent_file, "name must use lowercase alphanumeric hyphen-case")
+        elif name != agent_file.stem:
+            error(errors, agent_file, f"name '{name}' does not match file '{agent_file.stem}'")
+        if not fields.get("description"):
+            error(errors, agent_file, "description is required")
+        for skill in [s.strip() for s in fields.get("skills", "").split(",") if s.strip()]:
+            if not (plugin_root / "skills" / skill / "SKILL.md").is_file():
+                error(errors, agent_file, f"preloaded skill does not exist: {skill}")
+        count += 1
+    validate_injection_signatures(agents_dir, errors)
+    validate_secret_signatures(agents_dir, errors)
+    return count
+
+
 def validate_all_markdown_links(errors: list[str]) -> None:
     for path in ROOT.rglob("*.md"):
         if ".git" in path.parts:
@@ -303,6 +402,8 @@ def main() -> int:
         errors.append("skills: no skill directories found")
     for skill_dir in skill_dirs:
         validate_skill(skill_dir, errors)
+    hook_count = validate_hooks(PLUGIN_ROOT, errors)
+    agent_count = validate_agents(PLUGIN_ROOT, errors)
     validate_all_markdown_links(errors)
 
     if errors:
@@ -321,7 +422,7 @@ def main() -> int:
     )
     print(
         f"Validated {len(skill_dirs)} skills, {trigger_count} trigger cases, "
-        f"and {output_count} output evals."
+        f"{output_count} output evals, {hook_count} hooks, and {agent_count} agents."
     )
     return 0
 
