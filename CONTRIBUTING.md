@@ -43,6 +43,7 @@ This project follows [Semantic Versioning](https://semver.org/), and releases ar
 ## Commit and PR conventions
 
 - Use [Conventional Commit](https://www.conventionalcommits.org/) subjects (`feat:`, `fix:`, `docs:`, `ci:`, …) so Release Please can version and changelog the change.
+- Sign off every commit (`git commit -s`). The `Signed-off-by:` trailer certifies the [Developer Certificate of Origin 1.1](https://developercertificate.org/): that you wrote the change or have the right to submit it under the MIT license. Pull requests whose human-authored commits lack the trailer are not merged.
 - Keep changes focused; separate skill-content changes from tooling changes.
 - Write a clear description and fill in the pull request template checklist.
-- Maintainers review via `CODEOWNERS`; expect a validation run on every PR.
+- Maintainers review via `CODEOWNERS` against [docs/CODE_REVIEW.md](docs/CODE_REVIEW.md); expect a validation run on every PR.

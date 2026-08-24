@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Negative + positive tests proving each validate_package gate fires."""
 
 import json
@@ -47,7 +49,7 @@ def _root(tmp_path, monkeypatch):
 
 
 def errors_for(skill):
-    errs = []
+    errs: list[str] = []
     vp.validate_skill(skill, errs)
     return errs
 
@@ -207,7 +209,7 @@ def test_duplicate_output_id(tmp_path):
 
 def test_placeholder_term_detected(tmp_path):
     (tmp_path / "doc.md").write_text("This file has a TODO marker.\n", encoding="utf-8")
-    errs = []
+    errs: list[str] = []
     vp.validate_all_markdown_links(errs)
     assert any("template placeholder" in e for e in errs)
 

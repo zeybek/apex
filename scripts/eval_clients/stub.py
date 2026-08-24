@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Deterministic, offline client for exercising the harness without a model.
 
 No network or model calls. Activation is a keyword heuristic and usage is
@@ -16,7 +18,9 @@ from .base import EvalClient, InvocationResult
 class StubClient(EvalClient):
     name = "stub"
 
-    def run(self, prompt, *, skill=None, with_skill=True):
+    def run(
+        self, prompt: str, *, skill: str | None = None, with_skill: bool = True
+    ) -> InvocationResult:
         activated = False
         if skill and with_skill:
             stem = skill.rsplit("-", 1)[-1]

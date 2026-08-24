@@ -17,6 +17,7 @@
 - [ ] Skill bodies stay language- and framework-agnostic (no stack-specific content)
 - [ ] Reference links are one level deep and resolve
 - [ ] If releasing: version bumped in both `plugin.json` files and `CHANGELOG.md` updated
+- [ ] Commits are signed off (`git commit -s`), certifying the Developer Certificate of Origin
 
 ## Related issues
 

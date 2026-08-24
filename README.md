@@ -129,7 +129,14 @@ This pins a specific `skills-ref` commit for reproducibility. `skills-ref` is a 
 
 ## Security
 
-Apex skills are instructions, not executable code. The installed plugin is Markdown and JSON and does not execute code, make network calls, or read credentials on its own. The repository also contains two dependency-free offline validators and a developer-run eval harness that can explicitly invoke a configured agent client. The package validator scans skill and reference text for prompt-injection signatures, so instruction content cannot quietly redirect an agent. See [SECURITY.md](SECURITY.md) for the threat model and how to report an issue.
+Apex skills are instructions, not executable code. The installed plugin is Markdown and JSON and does not execute code, make network calls, or read credentials on its own. The repository also contains two dependency-free offline validators and a developer-run eval harness that can explicitly invoke a configured agent client. The package validator scans skill and reference text for prompt-injection signatures, so instruction content cannot quietly redirect an agent. See [SECURITY.md](SECURITY.md) for how to report an issue, [docs/ASSURANCE_CASE.md](docs/ASSURANCE_CASE.md) for the threat model and the argument that the security requirements hold, and [docs/RELEASING.md](docs/RELEASING.md) for how to verify a signed, provenance-attested release.
+
+## Project documentation
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — what the package, the tooling, and the release pipeline consist of and how they connect.
+- [docs/CODE_REVIEW.md](docs/CODE_REVIEW.md) — what every change is reviewed for and what makes it acceptable.
+- [GOVERNANCE.md](GOVERNANCE.md) — roles, decision making, and access continuity.
+- [ROADMAP.md](ROADMAP.md) — what the project intends to do and not do.
 
 ## Foundations
 

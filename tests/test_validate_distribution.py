@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Tests for the distribution-validator helpers + an integration run."""
 
 import json
@@ -6,19 +8,19 @@ import validate_distribution as vd
 
 
 def test_require_equal_flags_mismatch():
-    errs = []
+    errs: list[str] = []
     vd.require_equal(errs, "label", "actual", "expected")
     assert len(errs) == 1
 
 
 def test_require_equal_passes_on_match():
-    errs = []
+    errs: list[str] = []
     vd.require_equal(errs, "label", "same", "same")
     assert errs == []
 
 
 def test_require_subset_allows_extra_keys():
-    errs = []
+    errs: list[str] = []
     vd.require_subset(
         errs,
         "s",
@@ -29,13 +31,13 @@ def test_require_subset_allows_extra_keys():
 
 
 def test_require_subset_flags_missing_key():
-    errs = []
+    errs: list[str] = []
     vd.require_subset(errs, "s", {"source": "local"}, {"source": "local", "path": "./p"})
     assert len(errs) == 1
 
 
 def test_require_subset_flags_wrong_value():
-    errs = []
+    errs: list[str] = []
     vd.require_subset(
         errs, "s", {"source": "git", "path": "./p"}, {"source": "local", "path": "./p"}
     )
@@ -43,13 +45,13 @@ def test_require_subset_flags_wrong_value():
 
 
 def test_require_subset_flags_non_dict():
-    errs = []
+    errs: list[str] = []
     vd.require_subset(errs, "s", None, {"source": "local"})
     assert len(errs) == 1
 
 
 def test_find_plugin_returns_single_match():
-    errs = []
+    errs: list[str] = []
     catalog = {"plugins": [{"name": vd.PLUGIN_NAME, "source": "x"}]}
     found = vd.find_plugin(catalog, vd.ROOT, errs)
     assert found.get("name") == vd.PLUGIN_NAME
@@ -57,7 +59,7 @@ def test_find_plugin_returns_single_match():
 
 
 def test_find_plugin_flags_missing():
-    errs = []
+    errs: list[str] = []
     vd.find_plugin({"plugins": []}, vd.ROOT, errs)
     assert len(errs) == 1
 
@@ -73,7 +75,7 @@ def test_load_object_invalid_json(tmp_path, monkeypatch):
     monkeypatch.setattr(vd, "ROOT", tmp_path)
     bad = tmp_path / "bad.json"
     bad.write_text("{ not json", encoding="utf-8")
-    errs = []
+    errs: list[str] = []
     assert vd.load_object(bad, errs) == {}
     assert len(errs) == 1
 
@@ -82,7 +84,7 @@ def test_load_object_rejects_non_object(tmp_path, monkeypatch):
     monkeypatch.setattr(vd, "ROOT", tmp_path)
     arr = tmp_path / "arr.json"
     arr.write_text("[1, 2, 3]", encoding="utf-8")
-    errs = []
+    errs: list[str] = []
     assert vd.load_object(arr, errs) == {}
     assert any("must be a JSON object" in e for e in errs)
 

@@ -19,4 +19,4 @@ Do not open a public issue. Follow [SECURITY.md](SECURITY.md) and email **me@zey
 
 ## What to expect
 
-This is a single-maintainer project. Issues are triaged on a best-effort basis; security reports are prioritized on the timeline in [SECURITY.md](SECURITY.md). There is no guaranteed response time for non-security issues.
+This is a small project with two maintainers (see [GOVERNANCE.md](GOVERNANCE.md)). Issues are triaged on a best-effort basis; security reports are prioritized on the timeline in [SECURITY.md](SECURITY.md). There is no guaranteed response time for non-security issues.

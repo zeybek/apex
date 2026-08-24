@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Dependency-light eval harness for apex skills.
 
 Dev tooling — NOT a runtime validator, never imported by the validators, and
@@ -20,12 +22,16 @@ import json
 import sys
 from datetime import date
 from pathlib import Path
+from typing import Any
 
-from eval_clients import available_clients, get_client
+from eval_clients import EvalClient, available_clients, get_client
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_ROOT = ROOT / "plugins" / "apex" / "skills"
 TRIGGER_THRESHOLD = 0.5  # a positive query must fire on at least half its runs
+
+Case = dict[str, Any]
+Report = dict[str, Any]
 
 
 def positive_int(value: str) -> int:
@@ -56,11 +62,11 @@ def available_skills() -> list[str]:
     return sorted(path.name for path in SKILLS_ROOT.iterdir() if path.is_dir())
 
 
-def _read_json(path: Path):
+def _read_json(path: Path) -> Any:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def _emit(obj, out) -> str:
+def _emit(obj: object, out: str | Path | None) -> str:
     text = json.dumps(obj, indent=2, ensure_ascii=False) + "\n"
     if out:
         path = Path(out)
@@ -69,21 +75,26 @@ def _emit(obj, out) -> str:
     return text
 
 
-def load_trigger_cases(skill: str) -> list[dict]:
-    return _read_json(SKILLS_ROOT / skill / "evals" / "trigger-evals.json")
+def load_trigger_cases(skill: str) -> list[Case]:
+    cases: list[Case] = _read_json(SKILLS_ROOT / skill / "evals" / "trigger-evals.json")
+    return cases
 
 
-def load_output_cases(skill: str) -> list[dict]:
-    return _read_json(SKILLS_ROOT / skill / "evals" / "evals.json")["evals"]
+def load_output_cases(skill: str) -> list[Case]:
+    cases: list[Case] = _read_json(SKILLS_ROOT / skill / "evals" / "evals.json")["evals"]
+    return cases
 
 
-def split_train_validation(cases, seed, validation_fraction=0.4):
+def split_train_validation(
+    cases: list[Case], seed: int, validation_fraction: float = 0.4
+) -> tuple[list[Case], list[Case]]:
     """Deterministic, stratified train/validation split, stable across runs/clients."""
 
-    def order_key(case):
+    def order_key(case: Case) -> str:
         return hashlib.sha256(f"{seed}:{case['query']}".encode()).hexdigest()
 
-    train, validation = [], []
+    train: list[Case] = []
+    validation: list[Case] = []
     for label in (True, False):
         group = sorted((c for c in cases if bool(c.get("should_trigger")) is label), key=order_key)
         n_val = round(len(group) * validation_fraction)
@@ -92,11 +103,11 @@ def split_train_validation(cases, seed, validation_fraction=0.4):
     return train, validation
 
 
-def run_trigger(skill, client, runs=3, seed=13):
+def run_trigger(skill: str, client: EvalClient, runs: int = 3, seed: int = 13) -> Report:
     cases = load_trigger_cases(skill)
     _, validation = split_train_validation(cases, seed)
     validation_queries = {c["query"] for c in validation}
-    per_query = []
+    per_query: list[Case] = []
     for case in cases:
         query = case["query"]
         should = bool(case.get("should_trigger"))
@@ -112,7 +123,7 @@ def run_trigger(skill, client, runs=3, seed=13):
             }
         )
 
-    def pass_rate(split):
+    def pass_rate(split: str) -> float:
         items = [p for p in per_query if p["split"] == split]
         return round(sum(p["passed"] for p in items) / len(items), 4) if items else 0.0
 
@@ -135,7 +146,7 @@ def run_trigger(skill, client, runs=3, seed=13):
     }
 
 
-def cmd_trigger(args):
+def cmd_trigger(args: argparse.Namespace) -> int:
     client = get_client(args.client)
     report = run_trigger(args.skill, client, runs=args.runs, seed=args.seed)
     if args.threshold is not None:
@@ -156,7 +167,7 @@ def cmd_trigger(args):
     return 0
 
 
-def cmd_output(args):
+def cmd_output(args: argparse.Namespace) -> int:
     cases = load_output_cases(args.skill)
     if args.dry_run:
         print(
@@ -179,7 +190,8 @@ def cmd_output(args):
     for case in cases:
         case_dir = out_dir / str(case["id"])
         case_dir.mkdir(parents=True, exist_ok=True)
-        timings, texts = [], []
+        timings: list[dict[str, int | None]] = []
+        texts: list[str] = []
         for _ in range(args.samples):
             res = client.run(case["prompt"], skill=args.skill, with_skill=args.mode == "with-skill")
             timings.append({"total_tokens": res.total_tokens, "duration_ms": res.duration_ms})
@@ -203,14 +215,16 @@ def cmd_output(args):
     return 0
 
 
-def _aggregate_metrics(results_dir, cases, expected_mode, samples):
+def _aggregate_metrics(
+    results_dir: str | Path, cases: list[Case], expected_mode: str, samples: int
+) -> dict[str, float | int]:
     root = Path(results_dir)
     if not root.is_dir():
         raise ValueError(f"results directory does not exist: {root}")
 
     passed = 0
     assertion_count = 0
-    timings = []
+    timings: list[dict[str, Any]] = []
     for case in cases:
         case_id = str(case["id"])
         case_dir = root / case_id
@@ -254,7 +268,7 @@ def _aggregate_metrics(results_dir, cases, expected_mode, samples):
             raise ValueError(f"{timing_path}: every timing sample must be an object")
         timings.extend(case_timings)
 
-    metrics = {"assertion_pass_rate": round(passed / assertion_count, 4)}
+    metrics: dict[str, float | int] = {"assertion_pass_rate": round(passed / assertion_count, 4)}
     for field in ("duration_ms", "total_tokens"):
         values = [timing.get(field) for timing in timings]
         if field == "duration_ms":
@@ -268,13 +282,13 @@ def _aggregate_metrics(results_dir, cases, expected_mode, samples):
                 for value in values
             )
         if values and complete:
-            metrics[field] = sum(values)
+            metrics[field] = sum(v for v in values if isinstance(v, int | float))
     return metrics
 
 
-def cmd_aggregate(args):
+def cmd_aggregate(args: argparse.Namespace) -> int:
     cases = load_output_cases(args.skill)
-    benchmark = {
+    benchmark: Report = {
         "skill": args.skill,
         "client": args.client,
         "model": args.model,
@@ -296,7 +310,7 @@ def cmd_aggregate(args):
     return 0
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="apex skill eval harness (dev tooling).")
     sub = parser.add_subparsers(dest="command", required=True)
     skills = available_skills()
@@ -335,13 +349,14 @@ def build_parser():
     return parser
 
 
-def main(argv=None):
+def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
-        return args.func(args)
+        status: int = args.func(args)
     except (OSError, RuntimeError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
+    return status
 
 
 if __name__ == "__main__":
