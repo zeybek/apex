@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Validate the portable skill package without third-party dependencies."""
 
 from __future__ import annotations
@@ -7,6 +9,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -196,7 +199,7 @@ def validate_secret_signatures(skill_dir: Path, errors: list[str]) -> None:
             error(errors, path, "contains what looks like a committed secret or credential")
 
 
-def load_json(path: Path, errors: list[str]):
+def load_json(path: Path, errors: list[str]) -> Any:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:

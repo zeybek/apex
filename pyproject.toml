@@ -16,11 +16,41 @@ line-length = 100
 target-version = "py310"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP", "B"]
+# Maximally strict where practical: every stable rule family that applies to a
+# small standard-library tool, minus rule families that fight this codebase's
+# deliberate choices (documented per ignore).
+select = [
+  "E", "F", "W", "I", "UP", "B", "A", "ARG", "BLE", "C4", "DTZ", "ERA", "EXE",
+  "FLY", "G", "ISC", "LOG", "N", "PERF", "PGH", "PIE", "PL", "PT", "Q", "RET",
+  "RSE", "RUF", "S", "SIM", "SLF", "T20", "TID", "TRY", "YTT",
+]
+ignore = [
+  "T201",    # print() is the CLI's user interface
+  "S603",    # subprocess without shell=True is the intended, safe call form
+  "S607",    # `claude` is resolved from PATH on purpose (see eval_clients/claude_code.py)
+  "TRY003",  # long messages inside raise are the validators' user-facing output
+  "PLR2004", # magic numbers in validators are the documented spec limits
+  "PLR0912", "PLR0915", "PLR0913", "PLR0917", # validators are long, linear checklists by design
+  "TRY004",  # invalid file *content* is a ValueError to the CLI, not a TypeError
+  "ISC001",  # conflicts with the formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "SLF001", "PLR0917", "ARG001", "PLR6301"]  # asserts, private access, and fixtures are how pytest works
 
 [tool.ruff.lint.isort]
 known-first-party = ["validate_package", "validate_distribution"]
 
 [tool.mypy]
 python_version = "3.10"
+strict = true
 warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+# Tests stay strict on types they use but are not required to annotate every
+# fixture-driven test function; the production scripts are fully annotated.
+# mypy wildcards must be whole dotted components, so the test modules are listed.
+module = ["conftest", "test_examples", "test_run_evals", "test_validate_distribution", "test_validate_package"]
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = false

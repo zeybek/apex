@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Contract tests for the runnable example workspaces."""
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ def run_verifier(script: Path, workspace: Path) -> subprocess.CompletedProcess[s
         capture_output=True,
         text=True,
         timeout=60,
+        check=False,
     )
 
 

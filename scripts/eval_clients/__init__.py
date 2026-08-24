@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Pluggable client adapters for the apex eval harness."""
 
 from __future__ import annotations
@@ -6,14 +8,14 @@ from .base import EvalClient, InvocationResult
 from .claude_code import ClaudeCodeClient
 from .stub import StubClient
 
-_CLIENTS = {cls.name: cls for cls in (StubClient, ClaudeCodeClient)}
+_CLIENTS: dict[str, type[EvalClient]] = {cls.name: cls for cls in (StubClient, ClaudeCodeClient)}
 
 
-def available_clients():
+def available_clients() -> list[str]:
     return sorted(_CLIENTS)
 
 
-def get_client(name):
+def get_client(name: str) -> EvalClient:
     try:
         return _CLIENTS[name]()
     except KeyError:

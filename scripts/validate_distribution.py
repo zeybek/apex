@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Validate cross-client plugin manifests and marketplace catalogs."""
 
 from __future__ import annotations
@@ -8,6 +10,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN_NAME = "apex"
@@ -17,7 +20,7 @@ RELEASE_MANIFEST_PATH = ROOT / ".release-please-manifest.json"
 SEMVER_PATTERN = re.compile(r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 
 
-def load_object(path: Path, errors: list[str]) -> dict:
+def load_object(path: Path, errors: list[str]) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
@@ -29,12 +32,12 @@ def load_object(path: Path, errors: list[str]) -> dict:
     return value
 
 
-def require_equal(errors: list[str], label: str, actual, expected) -> None:
+def require_equal(errors: list[str], label: str, actual: object, expected: object) -> None:
     if actual != expected:
         errors.append(f"{label}: expected {expected!r}, found {actual!r}")
 
 
-def require_subset(errors: list[str], label: str, actual, expected: dict) -> None:
+def require_subset(errors: list[str], label: str, actual: object, expected: dict[str, Any]) -> None:
     """Require every expected key/value to be present, allowing extra keys."""
     if not isinstance(actual, dict):
         errors.append(f"{label}: expected an object, found {actual!r}")
@@ -44,7 +47,7 @@ def require_subset(errors: list[str], label: str, actual, expected: dict) -> Non
             errors.append(f"{label}.{key}: expected {value!r}, found {actual.get(key)!r}")
 
 
-def find_plugin(catalog: dict, path: Path, errors: list[str]) -> dict:
+def find_plugin(catalog: dict[str, Any], path: Path, errors: list[str]) -> dict[str, Any]:
     plugins = catalog.get("plugins")
     if not isinstance(plugins, list):
         errors.append(f"{path.relative_to(ROOT)}: plugins must be an array")

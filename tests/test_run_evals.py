@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Tests for the offline eval harness (stub client; no model calls)."""
 
 import json
@@ -244,7 +246,7 @@ def test_aggregate_metrics_counts_each_assertion_and_all_timings(tmp_path):
 def test_claude_code_client_rejects_failed_command(monkeypatch):
     monkeypatch.setattr(
         "eval_clients.claude_code.subprocess.run",
-        lambda *args, **kwargs: SimpleNamespace(returncode=1, stderr="failed", stdout=""),
+        lambda *_args, **_kwargs: SimpleNamespace(returncode=1, stderr="failed", stdout=""),
     )
 
     with pytest.raises(RuntimeError, match="exited with status 1"):

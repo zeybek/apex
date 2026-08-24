@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Claude Code adapter: shells `claude -p` and detects a Skill tool call.
 
 Requires the `claude` CLI and a configured skill environment, so it is never
@@ -10,6 +12,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+from typing import Any
 
 from .base import EvalClient, InvocationResult
 
@@ -17,13 +20,20 @@ from .base import EvalClient, InvocationResult
 class ClaudeCodeClient(EvalClient):
     name = "claude-code"
 
-    def run(self, prompt, *, skill=None, with_skill=True):  # pragma: no cover
+    def run(
+        self,
+        prompt: str,
+        *,
+        skill: str | None = None,
+        with_skill: bool = True,  # noqa: ARG002 - the CLI decides which skills are installed
+    ) -> InvocationResult:  # pragma: no cover
         try:
             proc = subprocess.run(
                 ["claude", "-p", prompt, "--output-format", "json"],
                 capture_output=True,
                 text=True,
                 timeout=600,
+                check=False,
             )
         except FileNotFoundError:
             raise RuntimeError("claude-code client requires the 'claude' CLI") from None
@@ -45,7 +55,7 @@ class ClaudeCodeClient(EvalClient):
         )
 
 
-def _messages(data):  # pragma: no cover
+def _messages(data: Any) -> list[dict[str, Any]]:  # pragma: no cover
     if isinstance(data, dict) and isinstance(data.get("messages"), list):
         return [m for m in data["messages"] if isinstance(m, dict)]
     if isinstance(data, list):
@@ -53,7 +63,7 @@ def _messages(data):  # pragma: no cover
     return []
 
 
-def _skill_invoked(data, skill):  # pragma: no cover
+def _skill_invoked(data: Any, skill: str) -> bool:  # pragma: no cover
     for message in _messages(data):
         for block in message.get("content", []) or []:
             if (
@@ -66,18 +76,19 @@ def _skill_invoked(data, skill):  # pragma: no cover
     return False
 
 
-def _result_text(data):  # pragma: no cover
-    if isinstance(data, dict) and isinstance(data.get("result"), str):
-        return data["result"]
+def _result_text(data: Any) -> str:  # pragma: no cover
+    result = data.get("result") if isinstance(data, dict) else None
+    if isinstance(result, str):
+        return result
     return json.dumps(data)[:4000]
 
 
-def _total_tokens(data):  # pragma: no cover
+def _total_tokens(data: Any) -> int | None:  # pragma: no cover
     usage = data.get("usage") if isinstance(data, dict) else None
     if isinstance(usage, dict):
-        return (usage.get("input_tokens") or 0) + (usage.get("output_tokens") or 0)
+        return int(usage.get("input_tokens") or 0) + int(usage.get("output_tokens") or 0)
     return None
 
 
-def _dig(data, key):  # pragma: no cover
+def _dig(data: Any, key: str) -> Any:  # pragma: no cover
     return data.get(key) if isinstance(data, dict) else None

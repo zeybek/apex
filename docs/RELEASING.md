@@ -20,6 +20,30 @@ The manifests are kept in sync automatically; `make validate` additionally check
 - `ci:`, `build:`, `chore:`, `test:` — hidden from the changelog.
 - Append `!` or a `BREAKING CHANGE:` footer for an incompatible change (major).
 
+## Verifying a release
+
+Every release attaches four files: the archive, a cosign signature and certificate, and the SLSA provenance bundle. Verification needs only public tooling; no project key is involved because signing is keyless (Sigstore), bound to this repository's release workflow identity.
+
+```bash
+V=0.4.0
+gh release download "v${V}" --repo zeybek/apex --pattern "apex-${V}.tar.gz*"
+
+# 1. Signature: the archive was signed by this repository's release workflow on main.
+cosign verify-blob "apex-${V}.tar.gz" \
+  --signature "apex-${V}.tar.gz.sig" \
+  --certificate "apex-${V}.tar.gz.pem" \
+  --certificate-identity "https://github.com/zeybek/apex/.github/workflows/release.yml@refs/heads/main" \
+  --certificate-oidc-issuer "https://token.actions.githubusercontent.com"
+
+# 2. Provenance: GitHub's attestation store confirms which workflow run built it.
+gh attestation verify "apex-${V}.tar.gz" --repo zeybek/apex
+
+# 3. Offline alternative: the same provenance as a Sigstore bundle, attached to the release.
+gh attestation verify "apex-${V}.tar.gz" --repo zeybek/apex --bundle "apex-${V}.tar.gz.intoto.jsonl"
+```
+
+The certificate identity is the workflow that ran on `main` when the release pull request was merged; a certificate naming any other repository, workflow, or branch means the archive did not come from this project's release process. Git tags are created by the release workflow and are shown as verified by GitHub; they are not separately GPG-signed.
+
 ## Submit to marketplaces
 
 These steps require maintainer accounts and are done by hand:

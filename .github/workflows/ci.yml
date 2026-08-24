@@ -49,6 +49,7 @@ jobs:
             coverage report --format=markdown 2>/dev/null || coverage report
           } >> "$GITHUB_STEP_SUMMARY"
       - run: ruff check scripts tests
+      - run: ruff format --check scripts tests
       - run: mypy scripts tests
 
   official:
@@ -98,6 +99,32 @@ jobs:
             python3 scripts/run_evals.py trigger --skill "$name" --client stub --runs 1
             python3 scripts/run_evals.py output --skill "$name" --client stub --dry-run
           done
+
+  dco:
+    name: DCO sign-off
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Require Signed-off-by on human-authored commits
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          missing=0
+          while IFS= read -r sha; do
+            author=$(git log -1 --format='%an <%ae>' "$sha")
+            case "$author" in
+              *"[bot]"*|*"github-actions"*|*"dependabot"*) continue ;;
+            esac
+            if ! git log -1 --format='%B' "$sha" | grep -qE '^Signed-off-by: .+ <.+@.+>'; then
+              echo "::error::commit $sha by $author has no Signed-off-by trailer (git commit -s)"
+              missing=1
+            fi
+          done < <(git rev-list "$BASE".."$HEAD")
+          exit $missing
 
   markdownlint:
     name: Markdown lint

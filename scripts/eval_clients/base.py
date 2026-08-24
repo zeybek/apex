@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Ahmet Zeybek and the Apex contributors
 """Client adapters for the apex eval harness.
 
 An adapter runs one prompt through some agent client and reports whether a
@@ -23,7 +25,7 @@ class InvocationResult:
 class EvalClient:
     """Base adapter. Subclasses run a prompt and report activation + usage."""
 
-    name = "base"
+    name: str = "base"
 
     def run(
         self, prompt: str, *, skill: str | None = None, with_skill: bool = True

@@ -2,14 +2,28 @@
 
 ## Reporting a vulnerability
 
-Please do not open a public issue for security problems. Email **me@zeybek.dev** with a description, reproduction steps, and the potential impact. Expect an acknowledgement within a few business days, and a coordinated disclosure timeline of at most 90 days from the report.
+Please do not open a public issue for security problems. Use either channel:
+
+- [GitHub private vulnerability reporting](https://github.com/zeybek/apex/security/advisories/new) (preferred; visible to both maintainers), or
+- email **me@zeybek.dev**
+
+with a description, reproduction steps, and the potential impact.
+
+## Response process
+
+1. **Acknowledge** within a few business days.
+2. **Triage** severity and scope; confirm or ask for more detail.
+3. **Fix** on a private branch when disclosure would put users at risk, otherwise in the open; release the fix as a patch release through the normal automated pipeline.
+4. **Disclose** in the release notes (CHANGELOG.md and the GitHub Release), crediting the reporter unless they ask to stay anonymous, within at most 90 days of the report.
 
 ## Supported versions
 
+Only the latest minor release line receives fixes; upgrade to the newest release to receive them.
+
 | Version | Supported |
 |---|---|
-| 0.1.x | ✅ |
-| < 0.1 | ❌ |
+| 0.4.x | ✅ |
+| < 0.4 | ❌ |
 
 ## Threat model and scope
 
@@ -31,7 +45,8 @@ Out of scope:
 ## What you can rely on
 
 - The validators are standard-library only and can be reviewed and run offline.
-- Releases are tagged; build provenance is attached to release artifacts where the CI supports it.
+- Releases are tagged, signed with cosign (keyless Sigstore), and attested with SLSA build provenance; [docs/RELEASING.md](docs/RELEASING.md) shows how to verify an archive.
+- The full argument for why these requirements hold, with threat model and trust boundaries, is in [docs/ASSURANCE_CASE.md](docs/ASSURANCE_CASE.md).
 
 ## Heuristic content scans
 
