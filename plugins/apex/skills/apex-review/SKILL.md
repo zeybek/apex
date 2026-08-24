@@ -16,7 +16,7 @@ Find concrete defects and material risks introduced or exposed by the change. Pr
 - Inspect the complete diff and enough surrounding code to understand behavior.
 - Identify the intended outcome, affected contracts, consumers, data, and production paths.
 - Run focused checks or inspect history when they materially improve confidence.
-- When a `.apex-design/<slug>/` planning workspace covers this change, review the diff against its `design.md` and `requirements.md`, and flag where the implementation diverges from the recorded decisions or fails an acceptance scenario.
+- When a `.apex-design/<slug>/` planning workspace covers this change, review the diff against its `design.md`, `requirements.md`, and `glossary.md`, and flag where the implementation diverges from the recorded decisions, fails an acceptance scenario, or drifts from the agreed vocabulary.
 
 ### 2. Build a risk map
 
@@ -58,7 +58,7 @@ Then state open questions or assumptions. Keep the summary secondary. If no find
 4. Contracts, compatibility, migrations, rollout, and rollback.
 5. Reliability, observability, and operational recovery.
 6. Performance, capacity, and resource bounds.
-7. Maintainability and unnecessary complexity.
+7. Maintainability, unnecessary complexity, and domain-language drift.
 8. Verification gaps that allow material regressions.
 
 ## Boundaries
@@ -76,6 +76,7 @@ Then state open questions or assumptions. Keep the summary secondary. If no find
 - Account for existing guards and conventions before claiming a gap; the validation may live one layer up.
 - A passing test suite is evidence the suite passed, not that the change is correct — review for what it omits.
 - A short accurate review outranks a long speculative one; do not pad findings to look thorough.
+- A rename that reads "cleaner" to an engineer can still be a defect: if stakeholders and the rest of the code call it a review, the diff that calls it an assessment has broken the shared language.
 
 ## Worked Example
 

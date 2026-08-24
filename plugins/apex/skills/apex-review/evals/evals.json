@@ -36,6 +36,18 @@
         "Any residual risk or test gap is presented as a limitation rather than a fabricated defect.",
         "The review does not open a finding entry or assign an actionable severity to the fullName function."
       ]
+    },
+    {
+      "id": "semantic-drift-review",
+      "prompt": "Review this refactor and report findings only:\n\n```diff\n-class Review:\n-    def __init__(self, product_id, score, body):\n+class Assessment:\n+    def __init__(self, product_id, rating, body):\n         self.product_id = product_id\n-        self.score = score\n+        self.rating = rating\n         self.body = body\n\n-def average_score(reviews):\n-    return sum(r.score for r in reviews) / len(reviews)\n+def average_rating(assessments):\n+    return sum(a.rating for a in assessments) / len(assessments)\n```\n\nThe product UI, support documentation, analytics events, and the rest of the codebase call these reviews and scores, and the repository's glossary lists Review and Score as the agreed terms. The author's PR description says the new names are clearer.",
+      "expected_output": "A finding that the rename breaks the shared domain vocabulary: stakeholders, documentation, telemetry, and the rest of the code say review and score while this module now says assessment and rating, so the change introduces synonyms for agreed terms without a recorded decision. Severity reflects a maintainability and communication defect, not a style preference, and the review does not fabricate unrelated defects.",
+      "assertions": [
+        "The review reports the rename as a concrete domain-language finding rather than a style comment, citing that the glossary, UI, documentation, and telemetry still use Review and Score.",
+        "The finding explains the impact: code and stakeholders no longer describe the same concept, and analytics or documentation references now diverge from the code.",
+        "The remediation direction is to keep the agreed terms or record an explicit vocabulary decision and update the glossary and dependents, not to silently accept the synonym.",
+        "The review does not invent unrelated defects such as empty-list division handling when the prompt gives no evidence about that contract.",
+        "Severity is proportionate: a medium or low maintainability finding, not a critical one."
+      ]
     }
   ]
 }

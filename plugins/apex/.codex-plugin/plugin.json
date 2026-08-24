@@ -22,7 +22,7 @@
     "developerName": "Ahmet Zeybek",
     "category": "Productivity",
     "defaultPrompt": [
-      "Plan this change end to end: ask clarifying questions, then produce a .apex-design planning workspace before building.",
+      "Plan this change end to end: ask clarifying questions, settle the domain vocabulary, then produce a .apex-design planning workspace before building.",
       "Implement the planned workspace task by task with risk-based verification, keeping its progress board current.",
       "Review this change for correctness and operational risk, against its recorded design and requirements when one exists.",
       "Investigate this failure and establish its root cause."

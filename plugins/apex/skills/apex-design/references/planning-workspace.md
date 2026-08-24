@@ -9,6 +9,7 @@ A planning workspace turns a design into durable, reviewable project documents t
   README.md                     index of initiatives and how the workspace works
   <NNN-slug>/                    one folder per initiative, e.g. 001-landing-page
     brief.md                    problem, outcome, scope, decisions log
+    glossary.md                 domain terms by context, forbidden synonyms, who confirmed them
     requirements.md             measurable quality and acceptance scenarios
     design.md                   alternatives, recommendation, contracts, operations
     plan.md                     sequenced atomic tasks with verification
@@ -27,7 +28,7 @@ Stable identifiers let every later artifact cite the reasoning behind it.
 - `R-01`, `R-02`, … requirements and acceptance scenarios (in `requirements.md`).
 - `T-01`, `T-02`, … plan tasks (in `plan.md`).
 
-Each requirement cites the decisions it depends on. Each task cites the decisions and requirements it satisfies. Never reuse or renumber an identifier once other files reference it.
+Each requirement cites the decisions it depends on. Each task cites the decisions and requirements it satisfies. Each glossary term that was chosen or changed cites the decision that settled it. Never reuse or renumber an identifier once other files reference it.
 
 ## File formats
 
@@ -40,6 +41,7 @@ Use these as templates. Replace every `<fill: …>` marker with real content; de
 
 - Status: drafting | planned | in progress | done | superseded
 - Decision owner: <fill: who signs off>
+- Domain expert: <fill: who confirms how the business behaves in the edge cases; may be the decision owner>
 - Created: <fill: date>
 
 ## Problem and outcome
@@ -57,6 +59,7 @@ Use these as templates. Replace every `<fill: …>` marker with real content; de
 ## Facts, assumptions, open questions
 - Fact: <fill: something verified from the repository or the user>
 - Assumption: <fill: something taken as true but not verified>
+- Domain assumption: <fill: how the business is believed to behave; needs the domain expert's confirmation>
 - Open question: <fill: still unresolved; resolve through the clarifying loop>
 
 ## Decisions log
@@ -69,21 +72,42 @@ Use these as templates. Replace every `<fill: …>` marker with real content; de
 ```text
 # Requirements — <fill: initiative title>
 
-Each requirement is observable or measurable and names the decisions it rests on.
+Each requirement is observable or measurable, names the outcome it serves, and names the decisions it rests on.
 
-- R-01 — <fill: requirement stated as observable behavior with a threshold> (depends on D-01)
+- R-01 — <fill: requirement stated as observable behavior with a threshold> (serves: <fill: the outcome this measure is a proxy for>; depends on D-01)
 - R-02 — <fill: acceptance scenario: given/when/then in plain language> (depends on D-02)
 
 ## Failure and abuse scenarios
 - R-0n — <fill: what must not happen, and how the system resists it>
 ```
 
+### glossary.md
+
+The domain vocabulary this initiative relies on. Follow [domain-language.md](domain-language.md). One name per concept per context; a term that means something different elsewhere in the system gets its own row with its own context.
+
+```text
+# Glossary — <fill: initiative title>
+
+| Term | Context | Meaning | Not to be confused with | Confirmed by |
+|---|---|---|---|---|
+| <fill: term> | <fill: module or area> | <fill: one-sentence meaning> | <fill: similar terms in other contexts> | <fill: expert or decision, e.g. D-02> |
+
+## Forbidden synonyms
+- <fill: synonym> -> use <fill: term> (<fill: context>)
+
+## Open terms
+- <fill: a concept that still has more than one name or no agreed meaning>
+```
+
 ### design.md
 
-This is the decision record. Follow [decision-record.md](decision-record.md) for the full structure. At minimum capture:
+This is the decision record. Follow [decision-record.md](decision-record.md) for the full structure. Open with a decision digest short enough that the decision owner will actually read it; the rest of the file is reference. At minimum capture:
 
 ```text
 # Design — <fill: initiative title>
+
+## Decision digest
+<fill: five lines or fewer: what was decided, why it wins, the biggest tradeoff, the riskiest assumption, and what would reopen it>
 
 ## Recommendation
 <fill: the chosen option, stated first, and why it wins under the stated priorities>
@@ -143,6 +167,9 @@ The implementation workflow keeps this current. Initialize every task as pending
 ## Decisions and blockers
 <fill: decisions made or changed during implementation, and anything blocking progress>
 
+## Owner handoff
+<fill: filled at close-out: the two or three things a person must understand to change or operate this safely, such as the domain rule it enforces, the invariant it relies on, and where it will break first>
+
 ## Session memory
 <fill: context a future session needs to resume without re-reading everything>
 ```
@@ -153,17 +180,25 @@ The implementation workflow keeps this current. Initialize every task as pending
 # Planning workspace
 
 This folder holds design and planning documents for non-trivial changes. Each
-subfolder is one initiative with a brief, requirements, design, plan, and
-progress board. Identifiers (D- decisions, R- requirements, T- tasks) connect
-the reasoning across files.
+subfolder is one initiative with a brief, glossary, requirements, design, plan,
+and progress board. Identifiers (D- decisions, R- requirements, T- tasks)
+connect the reasoning across files.
 
 ## Initiatives
 - 001-<slug> — <fill: one-line summary> — <fill: status>
 ```
 
+## Proportionality and confirmation
+
+Scale the written workspace to the risk of the work, using the same dimensions as the implementation risk model. Uncertainty counts: a one-line brief for consequential work is high-uncertainty and earns the full workspace. A small, well-understood, low-risk change earns `brief.md`, `glossary.md`, and `plan.md`; add `requirements.md` and `design.md` when quality scenarios, alternatives, or contracts genuinely need to be argued. When `design.md` is omitted, put the decision digest at the top of `brief.md`. State in the brief which files were deliberately omitted and why. A high-level sketch that everyone has read beats a complete specification nobody has.
+
+The brief's status moves from `drafting` to `planned` only after the decision owner has confirmed the decision digest and the glossary. Implementation does not start from a `drafting` workspace.
+
 ## Guardrails
 
 - Keep facts, assumptions, and open questions distinct; never present an assumption as a fact.
+- Use the glossary's terms everywhere in the workspace; do not introduce a synonym or merge two contexts' concepts without a recorded decision.
+- The value of the workspace is that the people who own the system understand the plan; a workspace the decision owner has not read is an artifact, not a plan.
 - Write non-goals as precisely as scope so the plan does not drift.
 - Prefer reversible early tasks when evidence is weak, and order the plan so the riskiest assumptions are tested soonest.
 - The workspace is documentation, not a substitute for the design reasoning; it records the decision, it does not replace making one.
@@ -173,3 +208,4 @@ the reasoning across files.
 - Architecture Decision Records: https://adr.github.io/
 - IEEE 830 software requirements practice: https://standards.ieee.org/ieee/830/1222/
 - Agile planning and incremental delivery: https://martinfowler.com/articles/planning-extreme-programming.html
+- Eric Evans, Domain-Driven Design reference (Ubiquitous Language, Bounded Context): https://www.domainlanguage.com/ddd/reference/

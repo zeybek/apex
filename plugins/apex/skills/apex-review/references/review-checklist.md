@@ -64,6 +64,13 @@ Use this checklist as prompts, not as a requirement to comment on every area. Fo
 - Are errors, naming, and module boundaries understandable to future owners?
 - Is broad cleanup obscuring the behavior change?
 
+## Domain and Language
+
+- Does the change introduce a synonym for an existing domain term, or rename a concept away from the name the business and the rest of the code use?
+- Does it merge two concepts that different parts of the system deliberately name or model differently, or generalize away a distinction the business relies on?
+- Are new terms consistent with the workspace glossary when one exists, and were they added to it rather than invented locally?
+- Does a domain rule in the code still mean what the design and glossary say, or has the implementation quietly redefined a term?
+
 ## Verification
 
 - Do tests prove the changed behavior and important failure modes?

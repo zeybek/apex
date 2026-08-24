@@ -70,13 +70,13 @@ In Claude Code, each skill is also a slash command, so a single-line request can
 
 | Command | What it does |
 |---|---|
-| `/apex-design <request>` | Ask clarifying questions and write a committed `.apex-design/<slug>/` planning workspace — even from a one-line brief |
+| `/apex-design <request>` | Ask clarifying questions, settle the domain vocabulary, and write a committed `.apex-design/<slug>/` planning workspace — even from a one-line brief |
 | `/apex-implement [slug]` | Execute the plan task by task, verify each, and keep its progress board current |
 | `/apex-progress [slug]` | Report status across `.apex-design/` initiatives: done, in progress, blocked, and what is next |
 | `/apex-review <target>` | Risk-first review, checked against the initiative's recorded design and requirements when present |
 | `/apex-investigate <symptom>` | Diagnose a failure to a root cause, using the recorded design as the intended-behavior baseline |
 
-`/apex-design` turns even "build me a landing page" into a deliberate plan: it discovers what the repository already answers, asks only the decisions it cannot infer, and persists a `.apex-design/<NNN-slug>/` folder with a brief, requirements, design, plan, and progress board. Stable identifiers — `D-` decisions, `R-` requirements, `T-` tasks — connect the reasoning across files. `/apex-implement` then executes that plan and keeps the progress board current, while review and investigation read the same workspace as shared context. The workspace is committed alongside the code as living project documentation.
+`/apex-design` turns even "build me a landing page" into a deliberate plan: it discovers what the repository already answers, asks only the decisions it cannot infer, and persists a `.apex-design/<NNN-slug>/` folder with a brief, glossary, requirements, design, plan, and progress board, scaled to the risk of the work. Stable identifiers — `D-` decisions, `R-` requirements, `T-` tasks — connect the reasoning across files, and the glossary pins the domain terms (per context, with forbidden synonyms) that every later file and the generated code must use. The design opens with a short decision digest that the decision owner confirms before implementation starts, so the plan is something the team has read rather than an artifact the agent produced. `/apex-implement` then executes that plan, keeps the progress board current, and closes with an owner handoff — the few things a person must understand to change the result safely — while review and investigation read the same workspace as shared context. The workspace is committed alongside the code as living project documentation.
 
 Other skills-compatible clients drive the same workflow through skill activation rather than slash commands; the resulting `.apex-design/` workspace is identical.
 
@@ -91,6 +91,7 @@ Other skills-compatible clients drive the same workflow through skill activation
 - Scale rigor with blast radius, reversibility, criticality, exposure, persistence, concurrency, compatibility, operability, and uncertainty.
 - Treat security, privacy, testing, observability, migrations, rollout, and recovery as engineering work, not optional follow-up.
 - Preserve project conventions and contracts unless evidence justifies changing them.
+- Model the domain before the mechanism: use the project's vocabulary, keep separately named concepts separate, involve the people who know the business, and leave the owners understanding the result rather than only holding a document about it.
 
 ## Always-on constitution
 
@@ -136,4 +137,4 @@ Apex skills are instructions, not executable code. The installed plugin is Markd
 
 ## Foundations
 
-The engineering guidance is consistent with established software-engineering practice rather than derived from any single methodology. Each reference file lists the specific sources it draws on under its "Foundational Sources" section — including IEEE SWEBOK, NIST SSDF, OWASP ASVS, SEI quality-attribute methods, Google SRE, and WCAG, among others. The packaging and evaluation approach follows the [Agent Skills specification](https://agentskills.io/specification.md), [best practices](https://agentskills.io/skill-creation/best-practices.md), and [evaluation guidance](https://agentskills.io/skill-creation/evaluating-skills.md).
+The engineering guidance is consistent with established software-engineering practice rather than derived from any single methodology. Each reference file lists the specific sources it draws on under its "Foundational Sources" section — including IEEE SWEBOK, NIST SSDF, OWASP ASVS, SEI quality-attribute methods, Google SRE, WCAG, the strategic patterns of Domain-Driven Design (Ubiquitous Language, Bounded Context), and Naur's theory-building view of programming, among others. The packaging and evaluation approach follows the [Agent Skills specification](https://agentskills.io/specification.md), [best practices](https://agentskills.io/skill-creation/best-practices.md), and [evaluation guidance](https://agentskills.io/skill-creation/evaluating-skills.md).

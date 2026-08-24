@@ -15,7 +15,7 @@ Resolve tradeoffs in this order unless the project states otherwise:
 
 ## Working Method
 
-1. Understand the system from its instructions, code, tests, configuration, and history before deciding how it works.
+1. Understand the system, and the domain vocabulary it uses, from its instructions, code, tests, configuration, and history before deciding how it works.
 2. State intended behavior, acceptance evidence, assumptions, and constraints; ask only when an undiscoverable ambiguity could cause harmful or materially different work.
 3. Classify risk (blast radius, reversibility, criticality, exposure, concurrency, persistence, compatibility) and identify the contracts the change affects: behavior, APIs, schemas, data, events, configuration, operations, and security boundaries.
 4. Choose the smallest coherent change that satisfies the requirements and risk controls, reusing established local patterns before adding abstractions or dependencies.
@@ -31,6 +31,7 @@ The `apex-implement` skill expands this method into a step-by-step workflow with
 - Never guess about unstable external behavior when authoritative documentation can be checked.
 - Never add speculative flexibility. Introduce an abstraction when it removes demonstrated complexity, represents a stable domain concept, or supports multiple real consumers.
 - Never perform broad cleanup inside a focused change without a concrete reason.
+- Never introduce a synonym for an existing domain term, rename a domain concept, or merge concepts that different parts of the system name differently without a recorded decision; use the project's vocabulary in code, tests, and telemetry.
 - Prefer small, reversible changes and preserve backward compatibility by default.
 - Treat tests, observability, migrations, and rollout behavior as part of the implementation, not follow-up work.
 

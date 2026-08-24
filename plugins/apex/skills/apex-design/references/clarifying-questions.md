@@ -4,7 +4,7 @@ A short or one-line request ("build me a landing page", "add notifications") rar
 
 ## Discover before asking
 
-1. Read repository instructions, existing code, configuration, schemas, tests, and recent history.
+1. Read repository instructions, existing code, configuration, schemas, tests, and recent history, including the names the code already uses for the concepts in the request (see [domain-language.md](domain-language.md)).
 2. Answer every question you can from that evidence, and record those answers as facts in the brief.
 3. Ask the user only about decisions that remain genuinely undetermined and that would change the plan.
 
@@ -21,6 +21,8 @@ Asking what you could have read erodes trust; guessing what you should have aske
 ## What to ask about
 
 - **Audience and context:** who uses this, on what devices or environments, and what they are trying to accomplish.
+- **Domain concepts and language:** what the request's key concepts mean, what the code and the business each call them, whether the same word means something different elsewhere in the system, and which existing name to adopt.
+- **Domain expert:** who can confirm how the business actually behaves in the edge cases, separately from who signs off on the decision.
 - **Primary goal and success:** the single most important outcome, the call to action or key result, and how success is measured.
 - **Scope and non-goals:** what is explicitly included now, what is deferred, and what is deliberately excluded.
 - **Priorities and tradeoffs:** which quality matters most when two conflict — speed, cost, reliability, accessibility, security, or time to ship.

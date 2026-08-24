@@ -48,6 +48,18 @@
         "The change stays within the planned scope, and divergence from the plan or design is surfaced and recorded rather than applied silently.",
         "Close-out reconciles finished work against the cited requirements and states residual risk."
       ]
+    },
+    {
+      "id": "vocabulary-preserving-implementation",
+      "prompt": "Add a 'reopen ticket' action to the support module. In our codebase the support module models a person as a Profile and the CRM module models them as a Customer; the .apex-design glossary says these are separate on purpose and forbids the synonym Client. Implement it using our existing patterns.",
+      "expected_output": "A focused implementation inside the support module that uses Profile and the existing ticket vocabulary, does not introduce a shared Customer or Client abstraction across the two modules, adds or reuses terms only through the glossary, verifies the reopen behavior including its invalid-state transitions, and reports what the owner must understand.",
+      "assertions": [
+        "The implementation uses the support module's own terms (Profile, ticket) and does not rename or merge them with the CRM's Customer or introduce Client.",
+        "No new abstraction spans the support and CRM modules merely because both refer to the same person.",
+        "Any term the implementation needs beyond the glossary is added to the glossary with a recorded decision rather than invented locally in code.",
+        "Verification covers the reopen transition and its invalid states, such as reopening a ticket that is not closed.",
+        "The close-out states what changed, what was verified, and the domain rule and invariant the owner must understand to change the action safely."
+      ]
     }
   ]
 }
