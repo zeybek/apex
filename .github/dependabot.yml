@@ -4,7 +4,20 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Wait for a release to age before proposing it, so a compromised or
+    # quickly-yanked upstream release is less likely to be picked up.
+    cooldown:
+      default-days: 7
+    groups:
+      # The CodeQL actions must move together: init, analyze, and
+      # upload-sarif at mixed versions fail with "Loaded a configuration
+      # file for version X, but running version Y".
+      codeql-action:
+        patterns:
+          - "github/codeql-action/*"
   - package-ecosystem: pip
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
