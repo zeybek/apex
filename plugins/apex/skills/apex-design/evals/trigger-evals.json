@@ -118,5 +118,17 @@
   {
     "query": "Report the status of the tasks in our planning workspace.",
     "should_trigger": false
+  },
+  {
+    "query": "Settle the domain vocabulary and context boundaries for the billing module before we build it.",
+    "should_trigger": true
+  },
+  {
+    "query": "Three of our services call the same thing three different names — plan how to straighten out the model without breaking them.",
+    "should_trigger": true
+  },
+  {
+    "query": "Rename the local variable usr to user in this function and update its tests.",
+    "should_trigger": false
   }
 ]

@@ -6,6 +6,8 @@
 - Use the repository's framework, helpers, error model, logging conventions, test infrastructure, and module boundaries when they remain sound.
 - Keep changes close to the component that owns the behavior.
 - Avoid introducing a second way to solve the same problem without a migration reason.
+- Use the domain vocabulary the repository and the workspace glossary already use, in code, tests, and telemetry. Do not introduce a synonym for an existing term, rename a domain concept, or merge concepts that different parts of the system name differently without a recorded decision.
+- Prefer a domain term over a generic one (`item`, `data`, `record`, `info`, `manager`) whenever the concept has a name; when a needed term is missing from the glossary, add it there rather than inventing a local name.
 
 ## Select the Solution
 
@@ -42,7 +44,8 @@ Avoid:
 - interfaces with one implementation and no boundary value;
 - configuration for values that are not expected to vary;
 - factories, wrappers, or layers that only rename another call;
-- generic frameworks built for imagined future use.
+- generic frameworks built for imagined future use;
+- abstractions that merge concepts from different parts of the system because they share a name or a shape.
 
 ## Manage Dependencies
 

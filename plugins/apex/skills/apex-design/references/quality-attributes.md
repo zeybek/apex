@@ -17,6 +17,10 @@ Example:
 
 > During a regional dependency outage, authenticated users can still read previously stored records, with stale state clearly identified, and 99% of responses complete within two seconds.
 
+## Tie Each Measure to Its Outcome
+
+A measure is a proxy for an outcome, and a scenario can hit its threshold while missing the goal: memory use falls and the cloud bill does not move, because the cost was elsewhere. Record the outcome each scenario serves next to its threshold, and check the recommendation against the outcome, not only the number.
+
 ## Consider Relevant Qualities
 
 - **Correctness and integrity:** invariants, calculations, consistency, and prevention of loss, corruption, or duplication.

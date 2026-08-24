@@ -78,5 +78,13 @@
   {
     "query": "What does the CI failure mean and how should I fix it?",
     "should_trigger": false
+  },
+  {
+    "query": "Check whether this refactor drifted from the terms in our domain glossary and report findings only.",
+    "should_trigger": true
+  },
+  {
+    "query": "Write the glossary of domain terms for our billing module.",
+    "should_trigger": false
   }
 ]

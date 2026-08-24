@@ -6,6 +6,7 @@ Direction for Apex, subject to change based on need and feedback. This is a prio
 
 - **Proof-of-value:** commit real, single-environment benchmarks (with-skill versus baseline) per skill, produced by the eval harness (`scripts/run_evals.py`).
 - Keep the four skills — design, implement, review, investigate — sharp and well-evaluated.
+- Benchmark the domain-language guidance (glossary, context boundaries, decision digest, owner handoff) with the same harness, so it earns its context like everything else.
 
 ## Next
 

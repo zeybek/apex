@@ -86,5 +86,13 @@
   {
     "query": "Write the .apex-design plan for this feature before we build anything.",
     "should_trigger": false
+  },
+  {
+    "query": "Add the reopen-ticket action to the support module using the terms in our glossary and our existing test patterns.",
+    "should_trigger": true
+  },
+  {
+    "query": "Before we build anything, settle what Customer, Account, and Profile mean across our modules.",
+    "should_trigger": false
   }
 ]

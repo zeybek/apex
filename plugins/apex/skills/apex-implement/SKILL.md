@@ -12,14 +12,14 @@ Implement the requested outcome while controlling engineering risk. Treat simpli
 
 ### 1. Establish the change contract
 
-- Translate the request into observable behavior and acceptance evidence.
+- Translate the request into observable behavior and acceptance evidence, in the vocabulary the repository and its glossary already use.
 - Discover missing context from repository instructions, code, tests, configuration, schemas, and history before asking questions.
 - Separate facts, assumptions, and unresolved decisions.
 - Identify explicit non-goals to prevent scope drift.
 
 ### 2. Adopt an existing plan workspace
 
-When a `.apex-design/<slug>/` workspace exists for this work, it is the contract. Read [plan-execution.md](references/plan-execution.md), then read its `brief.md`, `requirements.md`, `design.md`, and `plan.md` before changing code. Implement the plan's tasks in dependency order, run each task's `verify` and confirm its `done` condition, and keep `progress.md` current as you go. If a task cannot be done as written or the design proves wrong, surface the divergence and update the plan and decisions explicitly rather than quietly building something else.
+When a `.apex-design/<slug>/` workspace exists for this work, it is the contract. Read [plan-execution.md](references/plan-execution.md), then read its `brief.md`, `glossary.md`, `requirements.md`, `design.md`, and `plan.md` before changing code. If the brief is still `drafting`, restate the decision digest and confirm it with the decision owner before the first task. Implement the plan's tasks in dependency order, run each task's `verify` and confirm its `done` condition, and keep `progress.md` current as you go. If a task cannot be done as written or the design proves wrong, surface the divergence and update the plan and decisions explicitly rather than quietly building something else.
 
 ### 3. Inspect before deciding
 
@@ -65,7 +65,8 @@ State:
 - why the chosen approach fits the existing system;
 - what was verified and the results;
 - any unverified assumptions, limitations, or residual risk;
-- when a plan workspace drove the work, that `progress.md` reflects the final task status, outcomes, and any recorded divergences.
+- the two or three things the owner must understand to change or operate this safely: the domain rule it enforces, the invariant it relies on, and where it will break first;
+- when a plan workspace drove the work, that `progress.md` reflects the final task status, outcomes, any recorded divergences, and the owner handoff.
 
 Do not present optional future work as required work. Do not claim completion while required verification or implementation remains.
 
@@ -76,6 +77,7 @@ Do not present optional future work as required work. Do not claim completion wh
 - A broad catch-all around the failing path usually hides the defect you were asked to fix — narrow it.
 - Passing tests prove the tests passed, not that the change is correct; ask what they do not cover.
 - "Temporary" fallbacks and silent defaults outlive every deadline; give them defined semantics or remove them.
+- The repository's names are part of its contract with the people who run the business; a "clearer" synonym that only you use is drift, not clarity.
 
 ## Worked Example
 
@@ -95,4 +97,5 @@ Request: "The list endpoint sometimes returns duplicate items across pages."
 - [ ] Risk was classified and rigor scaled to trust boundaries, state, and contracts.
 - [ ] The diff is the smallest coherent change and preserves unrelated behavior.
 - [ ] A failing check was made to pass, and failures were inspected rather than only rerun.
-- [ ] The close-out states what changed, what was verified, and any residual risk.
+- [ ] Domain terms follow the repository and glossary; no concept was renamed or merged without a recorded decision.
+- [ ] The close-out states what changed, what was verified, any residual risk, and what the owner must understand to change it safely.

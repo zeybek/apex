@@ -40,13 +40,25 @@
     {
       "id": "one-line-feature-plan",
       "prompt": "Build me a landing page.",
-      "expected_output": "A clarifying-question pass that resolves the genuinely ambiguous decisions, followed by a committed .apex-design/<slug>/ planning workspace with brief, requirements, design, plan, and progress artifacts carrying traceable decision, requirement, and task identifiers.",
+      "expected_output": "A clarifying-question pass that resolves the genuinely ambiguous decisions, followed by a committed .apex-design/<slug>/ planning workspace with brief, glossary, requirements, design, plan, and progress artifacts carrying traceable decision, requirement, and task identifiers, and a decision digest confirmed with the decision owner.",
       "assertions": [
-        "The response asks targeted clarifying questions for genuinely ambiguous decisions such as audience, primary goal or call to action, and scope, rather than guessing or asking what the repository already answers.",
-        "Answered questions are recorded as numbered decisions, and measurable requirements are derived from them.",
-        "A persistent .apex-design/<slug>/ workspace is produced with separate brief, requirements, design, plan, and progress files.",
+        "The response asks targeted clarifying questions for genuinely ambiguous decisions such as audience, primary goal or call to action, scope, and the names of the concepts involved, rather than guessing or asking what the repository already answers.",
+        "Answered questions are recorded as numbered decisions, and measurable requirements that name the outcome they serve are derived from them.",
+        "A persistent .apex-design/<slug>/ workspace is produced with separate brief, glossary, requirements, design, plan, and progress files.",
         "The plan is a sequence of atomic, dependency-ordered tasks, each with a concrete verification and acceptance condition, traceable to the decisions and requirements.",
-        "The work treats even the one-line request as warranting a full, deliberate planning pass rather than jumping straight to code."
+        "The work treats the one-line request's uncertainty as warranting a full, deliberate planning pass rather than jumping straight to code, and presents a short decision digest for the owner to confirm before implementation."
+      ]
+    },
+    {
+      "id": "shared-term-two-contexts",
+      "prompt": "Our CRM module and our support module both define a Customer type with different fields, and the billing module calls the same person an Account. It looks like duplication. Design the cleanup — should we unify these into one shared Customer model?",
+      "expected_output": "A design that establishes what each term means in its own context before deciding, treats the three concepts as separate contexts unless evidence shows they are the same concept, records the vocabulary in a glossary with forbidden synonyms, proposes explicit translation at the seams instead of a shared model, and names the domain expert who must confirm the meanings.",
+      "assertions": [
+        "The design establishes what Customer means in the CRM context, what it means in the support context, and what Account means in billing before proposing any change.",
+        "The design does not unify the three concepts into one shared model merely because they share a name or similar fields; it keeps separately meaningful concepts separate and translates explicitly where the contexts meet.",
+        "The vocabulary is recorded in a glossary with the context of each term and forbidden synonyms, and any rename or merge is tied to a numbered decision.",
+        "The design names a domain expert or stakeholder who must confirm the meanings and lists the domain assumptions that still need confirmation.",
+        "Retaining the current separate models is evaluated as a credible alternative on the same axes as unification."
       ]
     }
   ]
