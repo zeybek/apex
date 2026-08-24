@@ -150,7 +150,17 @@ def main(argv: list[str] | None = None) -> int:
 
     for label, manifest in (("Codex plugin", codex_manifest), ("Claude plugin", claude_manifest)):
         hooks = manifest.get("hooks")
-        if hooks is not None and not (PLUGIN_ROOT / str(hooks)).is_file():
+        if hooks is None:
+            continue
+        # Both clients load hooks/hooks.json automatically; declaring it again in
+        # the manifest makes Claude Code reject the plugin with "Duplicate hooks
+        # file detected". The field may only point at *additional* hook files.
+        if Path(str(hooks)).as_posix().lstrip("./") == "hooks/hooks.json":
+            errors.append(
+                f"{label} must not declare the auto-loaded hooks/hooks.json in 'hooks'; "
+                "the field is only for additional hook files"
+            )
+        elif not (PLUGIN_ROOT / str(hooks)).is_file():
             errors.append(f"{label} hooks path does not exist: {hooks!r}")
 
     codex_entry = find_plugin(codex_marketplace, codex_marketplace_path, errors)
